@@ -1,0 +1,19 @@
+{
+    "name": "bibrokhim/http-clients",
+    "description": "Http clients for microservices",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Bibrokhim\\HttpClients\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Bakhromjon",
+            "email": "bahromjon.ibrohimov@yandex.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
