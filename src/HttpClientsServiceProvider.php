@@ -15,7 +15,14 @@ class HttpClientsServiceProvider extends ServiceProvider
 
         $this->app->bind(
             SmsClientInterface::class,
-            app()->isProduction() ? SmsGatewayClient::class : SmsDevClient::class
+            function () {
+                return app()->isProduction() 
+                    ? new SmsGatewayClient(
+                        config('http_clients.sms.base_url'),
+                        config('http_clients.sms.token')
+                    ) 
+                    : new SmsDevClient;
+            }
         );
     }
 

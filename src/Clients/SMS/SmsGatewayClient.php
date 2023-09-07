@@ -3,15 +3,14 @@
 namespace Bibrokhim\HttpClients\Clients\SMS;
 
 use Bibrokhim\HttpClients\Clients\BaseClient;
-use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 
 class SmsGatewayClient extends BaseClient implements SmsClientInterface
 {
-    public function __construct()
+    public function __construct(string $baseUrl, string $token)
     {
-        $this->client = Http::baseUrl(config('http_clients.sms.base_url'))
-            ->withToken(config('microservices.sms.token'));
+        $this->client = Http::baseUrl($baseUrl)
+            ->withToken($token);
     }
 
     public function send(string $phoneNumber, string $message): void
