@@ -8,6 +8,13 @@
             "Bibrokhim\\HttpClients\\": "src/"
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Bibrokhim\\HttpClients\\HttpClientsServiceProvider"
+            ]
+        }
+    },
     "authors": [
         {
             "name": "Bakhromjon",
@@ -15,5 +22,8 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {}
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^10"
+    }
 }
