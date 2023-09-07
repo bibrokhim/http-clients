@@ -79,7 +79,12 @@ abstract class BaseClient
 
         if ($response->serverError()) {
             Log::alert(
-                sprintf('%s: %d status. Body: %s', get_class($this), $response->status(), $response->body())
+                sprintf(
+                    '%s: %d status. Body: %s', 
+                    get_class($this), 
+                    $response->status(), 
+                    $response->body()
+                )
             );
             
             throw new Exception($response->json('message'));

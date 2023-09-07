@@ -2,6 +2,7 @@
 
 namespace Bibrokhim\HttpClients;
 
+use Bibrokhim\HttpClients\Clients\MediaClient;
 use Bibrokhim\HttpClients\Clients\SMS\SmsClientInterface;
 use Bibrokhim\HttpClients\Clients\SMS\SmsDevClient;
 use Bibrokhim\HttpClients\Clients\SMS\SmsGatewayClient;
@@ -15,14 +16,12 @@ class HttpClientsServiceProvider extends ServiceProvider
 
         $this->app->bind(
             SmsClientInterface::class,
-            function () {
-                return app()->isProduction() 
-                    ? new SmsGatewayClient(
-                        config('http_clients.sms.base_url'),
-                        config('http_clients.sms.token')
-                    ) 
-                    : new SmsDevClient;
-            }
+            fn() => app()->isProduction() 
+                ? new SmsGatewayClient(
+                    config('http_clients.sms.base_url'),
+                    config('http_clients.sms.token')
+                ) 
+                : new SmsDevClient
         );
     }
 
