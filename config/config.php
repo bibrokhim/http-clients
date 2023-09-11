@@ -12,4 +12,7 @@ return [
     'crm' => [
         'base_url' => env('CRM_BASE_URL'),
     ],
+    'helpdesk' => [
+        'base_url' => env('HELPDESK_BASE_URL'),
+    ],
 ];

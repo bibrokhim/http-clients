@@ -3,6 +3,7 @@
 namespace Bibrokhim\HttpClients;
 
 use Bibrokhim\HttpClients\Clients\CrmClient;
+use Bibrokhim\HttpClients\Clients\HelpdeskClient;
 use Bibrokhim\HttpClients\Clients\MediaClient;
 use Bibrokhim\HttpClients\Clients\SMS\SmsClientInterface;
 use Bibrokhim\HttpClients\Clients\SMS\SmsDevClient;
@@ -35,6 +36,12 @@ class HttpClientsServiceProvider extends ServiceProvider
         $this->app->bind(CrmClient::class, function () {
             return new CrmClient(
                 config('http_clients.crm.base_url'),
+            );
+        });
+
+        $this->app->bind(HelpdeskClient::class, function () {
+            return new HelpdeskClient(
+                config('http_clients.helpdesk.base_url'),
             );
         });
     }
