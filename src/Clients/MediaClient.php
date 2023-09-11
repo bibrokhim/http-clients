@@ -3,16 +3,9 @@
 namespace Bibrokhim\HttpClients\Clients;
 
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Http;
 
 class MediaClient extends BaseClient
 {
-    public function __construct(string $baseUrl, string $token)
-    {
-        $this->client = Http::baseUrl($baseUrl)
-            ->withToken($token);
-    }
-
     public function uploadImages(array $images, string $folderName): array
     {
         $response = $this

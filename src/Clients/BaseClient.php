@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 abstract class BaseClient
@@ -13,10 +14,24 @@ abstract class BaseClient
     protected ?string $method;
     protected ?string $url;
     protected array $headers = [
-        'Accept' => 'application/json'
+        'Accept' => 'application/json',
     ];
     protected array $attachments = [];
     protected PendingRequest $client;
+
+    public function __construct(string $baseUrl, ?string $token = null)
+    {
+        $this->client = Http::baseUrl($baseUrl);
+        
+        if (isset($token)) {
+            $this->client->withToken($token);
+        }
+
+        $this->headers = array_merge(
+            $this->headers,
+            ['Accept-Language' => app()->getLocale()]
+        );
+    }
 
     public function get(string $url): Response
     {
