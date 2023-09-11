@@ -23,6 +23,13 @@ class HttpClientsServiceProvider extends ServiceProvider
                 ) 
                 : new SmsDevClient
         );
+
+        $this->app->bind(MediaClient::class, function () {
+            return new MediaClient(
+                config('http_clients.media.base_url'),
+                config('http_clients.media.token')
+            );
+        });
     }
 
     public function boot()
