@@ -20,7 +20,7 @@ class MediaClient extends BaseClient
     public function uploadImage(UploadedFile $image, string $folderName): array
     {
         $response = $this
-            ->attach($image, 'images')
+            ->attach([$image], 'images')
             ->post('/images', [
                 'folder' => $folderName
             ]);

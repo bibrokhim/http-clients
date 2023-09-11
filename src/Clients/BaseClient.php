@@ -96,7 +96,7 @@ abstract class BaseClient
 
         $this->resetClient();
 
-        if ($response->failed()) {
+        if ($response->serverError()) {
             Log::alert(
                 sprintf(
                     '%s: %d status. Body: %s', 
@@ -106,7 +106,10 @@ abstract class BaseClient
                 )
             );
             
-            throw new Exception($response->json('message'));
+            throw new Exception(
+                $response->json('message'), 
+                $response->status()
+            );
         }
 
         return $response;
@@ -129,7 +132,7 @@ abstract class BaseClient
                 }
             } else {
                 $client->attach(
-                    $name . '[0]',
+                    $name,
                     $attachment->openFile(),
                     $attachment->getClientOriginalName()
                 );
