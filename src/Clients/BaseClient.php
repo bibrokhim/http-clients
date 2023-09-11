@@ -10,9 +10,11 @@ use Illuminate\Support\Facades\Log;
 
 abstract class BaseClient
 {
-    protected string $method;
-    protected string $url;
-    protected array $headers = [];
+    protected ?string $method;
+    protected ?string $url;
+    protected array $headers = [
+        'Accept' => 'application/json'
+    ];
     protected array $attachments = [];
     protected PendingRequest $client;
 
@@ -75,9 +77,11 @@ abstract class BaseClient
         $client = (clone $this->client)->withHeaders($this->headers);
         $client = $this->applyAttachments($client);
 
-        $response = $this->client->{$this->method}($this->url, $data);
+        $response = $client->{$this->method}($this->url, $data);
 
-        if ($response->serverError()) {
+        $this->resetClient();
+
+        if ($response->failed()) {
             Log::alert(
                 sprintf(
                     '%s: %d status. Body: %s', 
@@ -110,7 +114,7 @@ abstract class BaseClient
                 }
             } else {
                 $client->attach(
-                    $name,
+                    $name . '[0]',
                     $attachment->openFile(),
                     $attachment->getClientOriginalName()
                 );
@@ -118,5 +122,13 @@ abstract class BaseClient
         }
 
         return $client;
+    }
+
+    private function resetClient(): void
+    {
+        $this->method = null;
+        $this->url = null;
+        $this->headers = [];
+        $this->attachments = [];
     }
 }
