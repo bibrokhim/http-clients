@@ -9,4 +9,7 @@ return [
         'base_url' => env('MEDIA_BASE_URL'),
         'token' => env('MEDIA_TOKEN'),
     ],
+    'crm' => [
+        'base_url' => env('CRM_BASE_URL'),
+    ],
 ];

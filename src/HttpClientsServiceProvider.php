@@ -2,6 +2,7 @@
 
 namespace Bibrokhim\HttpClients;
 
+use Bibrokhim\HttpClients\Clients\CrmClient;
 use Bibrokhim\HttpClients\Clients\MediaClient;
 use Bibrokhim\HttpClients\Clients\SMS\SmsClientInterface;
 use Bibrokhim\HttpClients\Clients\SMS\SmsDevClient;
@@ -28,6 +29,12 @@ class HttpClientsServiceProvider extends ServiceProvider
             return new MediaClient(
                 config('http_clients.media.base_url'),
                 config('http_clients.media.token')
+            );
+        });
+
+        $this->app->bind(CrmClient::class, function () {
+            return new CrmClient(
+                config('http_clients.crm.base_url'),
             );
         });
     }
