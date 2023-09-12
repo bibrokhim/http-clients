@@ -19,11 +19,12 @@ abstract class BaseClient
     ];
     protected array $attachments = [];
     protected PendingRequest $client;
+    protected bool $failOnClientErrors = false;
 
     public function __construct(string $baseUrl, ?string $token = null)
     {
         $this->client = Http::baseUrl($baseUrl);
-        
+
         if (isset($token)) {
             $this->client->withToken($token);
         }
@@ -88,6 +89,13 @@ abstract class BaseClient
         return $this;
     }
 
+    public function failOnClientErrors(): static
+    {
+        $this->failOnClientErrors = true;
+
+        return $this;
+    }
+
     private function execute(array $data = []): Response
     {
         $client = (clone $this->client)->withHeaders($this->headers);
@@ -97,29 +105,36 @@ abstract class BaseClient
 
         $this->resetClient();
 
-        if ($response->failed()) {
+        if ($response->serverError()) {
             Log::alert(
                 sprintf(
-                    '%s: %d status. Body: %s', 
-                    get_class($this), 
-                    $response->status(), 
+                    '%s: %d status. Body: %s',
+                    get_class($this),
+                    $response->status(),
                     $response->body()
                 )
             );
 
-            if ($response->serverError()) {
-                throw new ServerErrorException(
-                    $response->json('message'),
-                    $response->status()
-                );
-            }
+            throw new ServerErrorException(
+                $response->json('message'),
+                $response->status()
+            );
+        }
 
-            if ($response->clientError()) {
-                throw new ClientErrorException(
-                    $response->json('message'),
-                    $response->status()
-                );
-            }
+        if ($response->clientError() && $this->failOnClientErrors) {
+            Log::alert(
+                sprintf(
+                    '%s: %d status. Body: %s',
+                    get_class($this),
+                    $response->status(),
+                    $response->body()
+                )
+            );
+
+            throw new ClientErrorException(
+                $response->json('message'),
+                $response->status()
+            );
         }
 
         return $response;
