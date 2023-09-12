@@ -2,7 +2,8 @@
 
 namespace Bibrokhim\HttpClients\Clients;
 
-use Exception;
+use Bibrokhim\HttpClients\Exceptions\ClientErrorException;
+use Bibrokhim\HttpClients\Exceptions\ServerErrorException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\UploadedFile;
@@ -96,7 +97,7 @@ abstract class BaseClient
 
         $this->resetClient();
 
-        if ($response->serverError()) {
+        if ($response->failed()) {
             Log::alert(
                 sprintf(
                     '%s: %d status. Body: %s', 
@@ -105,11 +106,20 @@ abstract class BaseClient
                     $response->body()
                 )
             );
-            
-            throw new Exception(
-                $response->json('message'), 
-                $response->status()
-            );
+
+            if ($response->serverError()) {
+                throw new ServerErrorException(
+                    $response->json('message'),
+                    $response->status()
+                );
+            }
+
+            if ($response->clientError()) {
+                throw new ClientErrorException(
+                    $response->json('message'),
+                    $response->status()
+                );
+            }
         }
 
         return $response;
