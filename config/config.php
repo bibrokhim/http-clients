@@ -4,6 +4,7 @@ return [
     'sms' => [
         'base_url' => env('SMS_BASE_URL'),
         'token' => env('SMS_TOKEN'),
+        'telegram_bot_token' => env('SMS_TELEGRAM_BOT_TOKEN'),
     ],
     'media' => [
         'base_url' => env('MEDIA_BASE_URL'),
