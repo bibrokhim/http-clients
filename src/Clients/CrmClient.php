@@ -22,10 +22,10 @@ class CrmClient extends BaseClient
         return $this->get("v1/regions/{$id}/cities")->json();
     }
 
-    public function fromDevice(Device $device): self
+    public function fromEpaUstaDevice(Device $device): self
     {
         return $this->withHeaders([
-            'X-User-ID' => $device->master_id,
+            'X-User-ID' => $device->user_id,
             'X-User-Type' => 'Master',
             'X-User-Platform' => $device->platform,
         ]);
