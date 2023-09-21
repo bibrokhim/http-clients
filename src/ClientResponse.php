@@ -2,12 +2,12 @@
 
 namespace Bibrokhim\HttpClients;
 
-use Illuminate\Http\Client\Response as ClientResponse;
+use Illuminate\Http\Client\Response;
 use Illuminate\Http\JsonResponse;
 
-class Response
+class ClientResponse
 {
-    public static function make(ClientResponse $response): JsonResponse
+    public static function make(Response $response): JsonResponse
     {
         return new JsonResponse(
             $response->json(),
