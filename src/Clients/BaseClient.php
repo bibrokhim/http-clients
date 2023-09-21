@@ -67,12 +67,12 @@ abstract class BaseClient
         return $this->execute($data);
     }
 
-    public function delete(string $url): Response
+    public function delete(string $url, array $data = []): Response
     {
         $this->url = $url;
         $this->method = 'delete';
 
-        return $this->execute();
+        return $this->execute($data);
     }
 
     public function withHeaders(array $headers): static
