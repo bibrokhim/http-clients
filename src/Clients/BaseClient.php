@@ -35,12 +35,12 @@ abstract class BaseClient
         );
     }
 
-    public function get(string $url): Response
+    public function get(string $url, array $data = []): Response
     {
         $this->url = $url;
         $this->method = 'get';
 
-        return $this->execute();
+        return $this->execute($data);
     }
 
     public function post(string $url, array $data = []): Response
