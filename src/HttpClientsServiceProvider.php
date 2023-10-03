@@ -3,6 +3,9 @@
 namespace Bibrokhim\HttpClients;
 
 use Bibrokhim\HttpClients\Clients\CrmClient;
+use Bibrokhim\HttpClients\Clients\Firebase\FirebaseClient;
+use Bibrokhim\HttpClients\Clients\Firebase\FirebaseClientInterface;
+use Bibrokhim\HttpClients\Clients\Firebase\FirebaseDevClient;
 use Bibrokhim\HttpClients\Clients\HelpdeskClient;
 use Bibrokhim\HttpClients\Clients\MediaClient;
 use Bibrokhim\HttpClients\Clients\SMS\SmsClientInterface;
@@ -16,14 +19,16 @@ class HttpClientsServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'http_clients');
 
-        $this->app->bind(
-            SmsClientInterface::class,
-            fn() => app()->isProduction() 
-                ? new SmsGatewayClient(
-                    config('http_clients.sms.base_url'),
-                    config('http_clients.sms.token')
-                ) 
-                : new SmsDevClient
+        $this->app->bind(SmsClientInterface::class, fn() =>
+            app()->isProduction()
+                ? new SmsGatewayClient(config('http_clients.sms.base_url'), config('http_clients.sms.token'))
+                : new SmsDevClient()
+        );
+
+        $this->app->bind(FirebaseClientInterface::class, fn() =>
+            app()->isProduction()
+                ? new FirebaseClient(config('http_clients.firebase.base_url'), config('http_clients.firebase.token'), 'epa-usta')
+                : new FirebaseDevClient()
         );
 
         $this->app->bind(MediaClient::class, function () {
