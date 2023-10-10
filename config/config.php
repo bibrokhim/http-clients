@@ -23,4 +23,7 @@ return [
     'helpdesk' => [
         'base_url' => env('HELPDESK_BASE_URL'),
     ],
+    'products' => [
+        'base_url' => env('PRODUCTS_BASE_URL'),
+    ],
 ];

@@ -8,6 +8,7 @@ use Bibrokhim\HttpClients\Clients\Firebase\FirebaseClientInterface;
 use Bibrokhim\HttpClients\Clients\Firebase\FirebaseDevClient;
 use Bibrokhim\HttpClients\Clients\HelpdeskClient;
 use Bibrokhim\HttpClients\Clients\MediaClient;
+use Bibrokhim\HttpClients\Clients\ProductsClient;
 use Bibrokhim\HttpClients\Clients\SMS\SmsClientInterface;
 use Bibrokhim\HttpClients\Clients\SMS\SmsDevClient;
 use Bibrokhim\HttpClients\Clients\SMS\SmsGatewayClient;
@@ -47,6 +48,12 @@ class HttpClientsServiceProvider extends ServiceProvider
         $this->app->bind(HelpdeskClient::class, function () {
             return new HelpdeskClient(
                 config('http_clients.helpdesk.base_url'),
+            );
+        });
+
+        $this->app->bind(ProductsClient::class, function () {
+            return new ProductsClient(
+                config('http_clients.products.base_url'),
             );
         });
     }
