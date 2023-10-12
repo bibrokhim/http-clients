@@ -6,21 +6,21 @@ use App\Models\Device;
 use Bibrokhim\HttpClients\Clients\BaseClient;
 use Illuminate\Http\UploadedFile;
 
-class CrmClient extends BaseClient
+class CrmClient extends BaseClient implements CrmClientInterface
 {
-    public function professions()
+    public function professions(): array
     {
         return $this->get('v1/professions')->json();
     }
 
-    public function regions()
+    public function regions(): array
     {
         return $this->get('v1/regions')->json();
     }
 
-    public function cities(string $id)
+    public function cities(string $regionId): array
     {
-        return $this->get("v1/regions/{$id}/cities")->json();
+        return $this->get("v1/regions/{$regionId}/cities")->json();
     }
 
     public function fromEpaUstaDevice(Device $device): self

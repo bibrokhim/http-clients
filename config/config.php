@@ -26,4 +26,6 @@ return [
     'products' => [
         'base_url' => env('PRODUCTS_BASE_URL'),
     ],
+
+    'cache' => env('HTTP_CLIENT_CACHE', false),
 ];

@@ -2,7 +2,9 @@
 
 namespace Bibrokhim\HttpClients;
 
+use Bibrokhim\HttpClients\Clients\CRM\CrmCacheClient;
 use Bibrokhim\HttpClients\Clients\CRM\CrmClient;
+use Bibrokhim\HttpClients\Clients\CRM\CrmClientInterface;
 use Bibrokhim\HttpClients\Clients\Firebase\FirebaseClient;
 use Bibrokhim\HttpClients\Clients\Firebase\FirebaseClientInterface;
 use Bibrokhim\HttpClients\Clients\Firebase\FirebaseDevClient;
@@ -39,10 +41,11 @@ class HttpClientsServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->bind(CrmClient::class, function () {
-            return new CrmClient(
-                config('http_clients.crm.base_url'),
-            );
+        $this->app->bind(CrmClientInterface::class, function () {
+            return config('http_clients.cache')
+                ? new CrmCacheClient(config('http_clients.crm.base_url'))
+                : new CrmClient(config('http_clients.crm.base_url'));
+
         });
 
         $this->app->bind(HelpdeskClient::class, function () {
