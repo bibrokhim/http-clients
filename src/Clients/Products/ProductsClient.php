@@ -1,9 +1,11 @@
 <?php
 
-namespace Bibrokhim\HttpClients\Clients;
+namespace Bibrokhim\HttpClients\Clients\Products;
 
 
+use Bibrokhim\HttpClients\Clients\BaseClient;
 use Illuminate\Support\Arr;
+use function Bibrokhim\HttpClients\Clients\request;
 
 class ProductsClient extends BaseClient
 {

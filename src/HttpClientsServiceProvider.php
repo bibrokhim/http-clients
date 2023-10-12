@@ -2,13 +2,13 @@
 
 namespace Bibrokhim\HttpClients;
 
-use Bibrokhim\HttpClients\Clients\CrmClient;
+use Bibrokhim\HttpClients\Clients\CRM\CrmClient;
 use Bibrokhim\HttpClients\Clients\Firebase\FirebaseClient;
 use Bibrokhim\HttpClients\Clients\Firebase\FirebaseClientInterface;
 use Bibrokhim\HttpClients\Clients\Firebase\FirebaseDevClient;
-use Bibrokhim\HttpClients\Clients\HelpdeskClient;
-use Bibrokhim\HttpClients\Clients\MediaClient;
-use Bibrokhim\HttpClients\Clients\ProductsClient;
+use Bibrokhim\HttpClients\Clients\Helpdesk\HelpdeskClient;
+use Bibrokhim\HttpClients\Clients\Media\MediaClient;
+use Bibrokhim\HttpClients\Clients\Products\ProductsClient;
 use Bibrokhim\HttpClients\Clients\SMS\SmsClientInterface;
 use Bibrokhim\HttpClients\Clients\SMS\SmsDevClient;
 use Bibrokhim\HttpClients\Clients\SMS\SmsGatewayClient;

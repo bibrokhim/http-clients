@@ -1,7 +1,8 @@
 <?php
 
-namespace Bibrokhim\HttpClients\Clients;
+namespace Bibrokhim\HttpClients\Clients\Media;
 
+use Bibrokhim\HttpClients\Clients\BaseClient;
 use Illuminate\Http\UploadedFile;
 
 class MediaClient extends BaseClient
