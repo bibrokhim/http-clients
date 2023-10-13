@@ -4,75 +4,70 @@ namespace Bibrokhim\HttpClients\Clients\Products;
 
 
 use Bibrokhim\HttpClients\Clients\BaseClient;
-use Illuminate\Support\Arr;
-use function Bibrokhim\HttpClients\Clients\request;
 
-class ProductsClient extends BaseClient
+class ProductsClient extends BaseClient implements ProductsClientInterface
 {
-    public function categories()
+    public function categories(): array
     {
         return $this->get('v1/product-categories')->json();
     }
 
-    public function sparePartCategories()
+    public function sparePartCategories(): array
     {
         return $this->get('v1/spare-part-categories')->json();
     }
 
-    public function merchCategories()
+    public function merchCategories(): array
     {
         return $this->get('v1/merch-categories')->json();
     }
 
-    public function categoryProducts(string $productCategoryId)
+    public function categoryProducts(string $productCategoryId): array
     {
         return $this->get("v1/product-categories/$productCategoryId/products", request()->query())->json();
     }
 
-    public function categorySpareParts(string $sparePartCategoryId)
+    public function categorySpareParts(string $sparePartCategoryId): array
     {
         return $this->get("v1/spare-part-categories/$sparePartCategoryId/spare-parts", request()->query())->json();
     }
 
-    public function categoryMerchProducts(string $merchCategoryId)
+    public function categoryMerchProducts(string $merchCategoryId): array
     {
         return $this->get("v1/merch-categories/$merchCategoryId/merch-products", request()->query())->json();
     }
 
-    public function dealers()
+    public function dealers(): array
     {
         return $this->get('v1/dealers')->json();
     }
 
-    public function products()
+    public function products(): array
     {
         return $this->get('v1/products', request()->query())->json();
     }
 
-    public function product(string $productId)
+    public function product(string $productId): array
     {
         return $this->get("v1/products/$productId")->json();
     }
 
-    public function productSearch(string $search)
+    public function productSearch(): array
     {
-        return $this->get(
-            'v1/products-search',
-            Arr::add(request()->query(), 'search', $search)
-        )->json();
+        return $this->get('v1/products-search', request()->query())->json();
     }
 
-    public function newProducts()
+    public function newProducts(): array
     {
         return $this->get('v1/products-new', request()->query())->json();
     }
 
-    public function hotNewProducts()
+    public function hotNewProducts(): array
     {
         return $this->get('v1/products-hot-new', request()->query())->json();
     }
 
-    public function merchProduct(string $merchProductId)
+    public function merchProduct(string $merchProductId): array
     {
         return $this->get("v1/merch-products/$merchProductId")->json();
     }
