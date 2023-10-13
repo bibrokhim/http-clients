@@ -10,6 +10,7 @@ use Bibrokhim\HttpClients\Clients\Firebase\FirebaseClientInterface;
 use Bibrokhim\HttpClients\Clients\Firebase\FirebaseDevClient;
 use Bibrokhim\HttpClients\Clients\Helpdesk\HelpdeskClient;
 use Bibrokhim\HttpClients\Clients\Media\MediaClient;
+use Bibrokhim\HttpClients\Clients\Products\ProductsCacheClient;
 use Bibrokhim\HttpClients\Clients\Products\ProductsClient;
 use Bibrokhim\HttpClients\Clients\SMS\SmsClientInterface;
 use Bibrokhim\HttpClients\Clients\SMS\SmsDevClient;
@@ -55,9 +56,9 @@ class HttpClientsServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(ProductsClient::class, function () {
-            return new ProductsClient(
-                config('http_clients.products.base_url'),
-            );
+            return config('http_clients.cache')
+                ? new ProductsCacheClient(config('http_clients.products.base_url'))
+                : new ProductsClient(config('http_clients.products.base_url'));
         });
     }
 
