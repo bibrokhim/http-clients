@@ -103,7 +103,7 @@ class ProductsCacheClient extends ProductsClient
 
     public function products(): array
     {
-        $key = self::PREFIX . __FUNCTION__ . request()->getQueryString();
+        $key = self::PREFIX . __FUNCTION__ . '.' . request()->getQueryString();
 
         if (Cache::has($key)) return Cache::get($key);
 
@@ -129,7 +129,7 @@ class ProductsCacheClient extends ProductsClient
 
     public function productSearch(): array
     {
-        $key = self::PREFIX . __FUNCTION__ . request()->getQueryString();
+        $key = self::PREFIX . __FUNCTION__ . '.' . request()->getQueryString();
 
         if (Cache::has($key)) return Cache::get($key);
 
@@ -142,7 +142,7 @@ class ProductsCacheClient extends ProductsClient
 
     public function newProducts(): array
     {
-        $key = self::PREFIX . __FUNCTION__ . request()->getQueryString();
+        $key = self::PREFIX . __FUNCTION__ . '.' . request()->getQueryString();
 
         if (Cache::has($key)) return Cache::get($key);
 
@@ -155,7 +155,7 @@ class ProductsCacheClient extends ProductsClient
 
     public function hotNewProducts(): array
     {
-        $key = self::PREFIX . __FUNCTION__ . request()->getQueryString();
+        $key = self::PREFIX . __FUNCTION__ . '.' . request()->getQueryString();
 
         if (Cache::has($key)) return Cache::get($key);
 

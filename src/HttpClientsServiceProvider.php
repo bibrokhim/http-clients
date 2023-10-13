@@ -12,6 +12,7 @@ use Bibrokhim\HttpClients\Clients\Helpdesk\HelpdeskClient;
 use Bibrokhim\HttpClients\Clients\Media\MediaClient;
 use Bibrokhim\HttpClients\Clients\Products\ProductsCacheClient;
 use Bibrokhim\HttpClients\Clients\Products\ProductsClient;
+use Bibrokhim\HttpClients\Clients\Products\ProductsClientInterface;
 use Bibrokhim\HttpClients\Clients\SMS\SmsClientInterface;
 use Bibrokhim\HttpClients\Clients\SMS\SmsDevClient;
 use Bibrokhim\HttpClients\Clients\SMS\SmsGatewayClient;
@@ -49,13 +50,17 @@ class HttpClientsServiceProvider extends ServiceProvider
 
         });
 
+        $this->app->bind(CrmClient::class, function () {
+            return new CrmClient(config('http_clients.crm.base_url'));
+        });
+
         $this->app->bind(HelpdeskClient::class, function () {
             return new HelpdeskClient(
                 config('http_clients.helpdesk.base_url'),
             );
         });
 
-        $this->app->bind(ProductsClient::class, function () {
+        $this->app->bind(ProductsClientInterface::class, function () {
             return config('http_clients.cache')
                 ? new ProductsCacheClient(config('http_clients.products.base_url'))
                 : new ProductsClient(config('http_clients.products.base_url'));
