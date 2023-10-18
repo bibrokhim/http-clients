@@ -16,6 +16,8 @@ interface ProductsClientInterface
 
     public function categoryMerchProducts(string $merchCategoryId): array;
 
+    public function categoriesMerchProducts(array $merchCategories): array;
+
     public function dealers(): array;
 
     public function products(): array;

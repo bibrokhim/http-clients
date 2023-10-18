@@ -37,9 +37,11 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
         return $this->get("v1/merch-categories/$merchCategoryId/merch-products", request()->query())->json();
     }
 
-    public function categoriesMerchProducts(): array
+    public function categoriesMerchProducts(array $merchCategories): array
     {
-        return $this->get("v1/merch-categories-ids/merch-products", request()->query())->json();
+        $queryString = '["' . implode('","', $merchCategories) . '"]';
+
+        return $this->get("v1/merch-categories-ids/merch-products?$queryString")->json();
     }
 
     public function dealers(): array

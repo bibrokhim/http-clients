@@ -88,6 +88,19 @@ class ProductsCacheClient extends ProductsClient
         );
     }
 
+    public function categoriesMerchProducts(array $merchCategories): array
+    {
+        $key = self::PREFIX . __FUNCTION__ . '.' . implode('-', $merchCategories);
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::categoriesMerchProducts($merchCategories),
+            self::TTL
+        );
+    }
+
     public function dealers(): array
     {
         $key = self::PREFIX . __FUNCTION__;
