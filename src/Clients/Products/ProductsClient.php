@@ -9,7 +9,7 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
 {
     public function categories(): array
     {
-        return $this->get('v1/product-categories')->json();
+        return $this->get('v1/product-categories', request()->query())->json();
     }
 
     public function sparePartCategories(): array
