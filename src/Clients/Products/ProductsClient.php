@@ -37,6 +37,11 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
         return $this->get("v1/merch-categories/$merchCategoryId/merch-products", request()->query())->json();
     }
 
+    public function categoriesMerchProducts(): array
+    {
+        return $this->get("v1/merch-categories-ids/merch-products", request()->query())->json();
+    }
+
     public function dealers(): array
     {
         return $this->get('v1/dealers')->json();
