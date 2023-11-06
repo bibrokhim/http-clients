@@ -31,4 +31,8 @@ interface ProductsClientInterface
     public function hotNewProducts(): array;
 
     public function merchProduct(string $merchProductId): array;
+
+    public function productStock(string $productId): array;
+
+    public function merchProductStock(string $merchProductId): array;
 }

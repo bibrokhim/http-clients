@@ -191,4 +191,30 @@ class ProductsCacheClient extends ProductsClient
             self::TTL
         );
     }
+
+    public function productStock(string $productId): array
+    {
+        $key = self::PREFIX . __FUNCTION__ . ".$productId";
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::productStock($productId),
+            self::TTL
+        );
+    }
+
+    public function merchProductStock(string $merchProductId): array
+    {
+        $key = self::PREFIX . __FUNCTION__ . ".$merchProductId";
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::merchProductStock($merchProductId),
+            self::TTL
+        );
+    }
 }
