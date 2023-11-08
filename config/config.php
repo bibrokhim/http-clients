@@ -26,6 +26,9 @@ return [
     'products' => [
         'base_url' => env('PRODUCTS_BASE_URL'),
     ],
+    'one_c' => [
+        'base_url' => env('ONE_C_BASE_URL'),
+    ],
 
     'cache' => env('HTTP_CLIENT_CACHE', false),
 ];
