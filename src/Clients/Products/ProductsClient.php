@@ -56,11 +56,11 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
 
     public function productsByIds(string $productType, array $ids): array
     {
-        $ids = '"'.implode('","', $ids).'"';
+        $ids = '["'.implode('","', $ids).'"]';
 
         return $this
-            ->get("v1/products/$productType", compact('ids'))
-            ->json();
+            ->get("v1/products/$productType/products-ids", compact('ids'))
+            ->json('data');
     }
 
     public function product(string $productId): array

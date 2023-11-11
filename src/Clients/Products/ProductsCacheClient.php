@@ -129,7 +129,7 @@ class ProductsCacheClient extends ProductsClient
 
     public function productsByIds(string $productType, array $ids): array
     {
-        $idsKey = '"'.implode('","', $ids).'"';
+        $idsKey = '["'.implode('","', $ids).'"]';
 
         $key = self::PREFIX . __FUNCTION__ . '.' . $productType . '.' . $idsKey;
 
