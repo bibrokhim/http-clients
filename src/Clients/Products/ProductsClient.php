@@ -54,6 +54,15 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
         return $this->get('v1/products', request()->query())->json();
     }
 
+    public function productsByIds(string $productType, array $ids): array
+    {
+        $ids = '"'.implode('","', $ids).'"';
+
+        return $this
+            ->get("v1/products/$productType", compact('ids'))
+            ->json();
+    }
+
     public function product(string $productId): array
     {
         return $this->get("v1/products/$productId")->json();

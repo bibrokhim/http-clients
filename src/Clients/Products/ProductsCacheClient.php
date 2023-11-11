@@ -127,6 +127,21 @@ class ProductsCacheClient extends ProductsClient
         );
     }
 
+    public function productsByIds(string $productType, array $ids): array
+    {
+        $idsKey = '"'.implode('","', $ids).'"';
+
+        $key = self::PREFIX . __FUNCTION__ . '.' . $productType . '.' . $idsKey;
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::productsByIds($productType, $ids),
+            self::TTL
+        );
+    }
+
     public function product(string $productId): array
     {
         $key = self::PREFIX . __FUNCTION__ . ".$productId";
