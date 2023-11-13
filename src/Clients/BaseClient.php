@@ -2,9 +2,11 @@
 
 namespace Bibrokhim\HttpClients\Clients;
 
+use Bibrokhim\HttpClients\AsyncRequest;
 use Bibrokhim\HttpClients\Exceptions\ClientErrorException;
 use Bibrokhim\HttpClients\Exceptions\ServerErrorException;
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\Pool;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
@@ -14,6 +16,7 @@ abstract class BaseClient
 {
     protected ?string $method;
     protected ?string $url;
+    protected string $baseUrl;
     protected array $headers = [
         'Accept' => 'application/json',
     ];
@@ -24,6 +27,7 @@ abstract class BaseClient
     public function __construct(string $baseUrl, ?string $token = null)
     {
         $this->client = Http::baseUrl($baseUrl);
+        $this->baseUrl = $baseUrl;
 
         if (isset($token)) {
             $this->client->withToken($token);
@@ -35,6 +39,10 @@ abstract class BaseClient
         );
     }
 
+    /**
+     * @throws ClientErrorException
+     * @throws ServerErrorException
+     */
     public function get(string $url, array $data = []): Response
     {
         $this->url = $url;
@@ -43,6 +51,10 @@ abstract class BaseClient
         return $this->execute($data);
     }
 
+    /**
+     * @throws ClientErrorException
+     * @throws ServerErrorException
+     */
     public function post(string $url, array $data = []): Response
     {
         $this->url = $url;
@@ -51,6 +63,10 @@ abstract class BaseClient
         return $this->execute($data);
     }
 
+    /**
+     * @throws ClientErrorException
+     * @throws ServerErrorException
+     */
     public function patch(string $url, array $data = []): Response
     {
         $this->url = $url;
@@ -59,6 +75,10 @@ abstract class BaseClient
         return $this->execute($data);
     }
 
+    /**
+     * @throws ClientErrorException
+     * @throws ServerErrorException
+     */
     public function put(string $url, array $data = []): Response
     {
         $this->url = $url;
@@ -67,6 +87,10 @@ abstract class BaseClient
         return $this->execute($data);
     }
 
+    /**
+     * @throws ClientErrorException
+     * @throws ServerErrorException
+     */
     public function delete(string $url, array $data = []): Response
     {
         $this->url = $url;
@@ -96,6 +120,39 @@ abstract class BaseClient
         return $this;
     }
 
+    /**
+     * @throws ClientErrorException
+     * @throws ServerErrorException
+     */
+    public function async(array $requests)
+    {
+        $client = (clone $this->client)->withHeaders($this->headers);
+        $asyncRequests = [];
+
+        foreach ($requests as $request) {
+            if ($request instanceof AsyncRequest) {
+                $asyncRequests[] = $request;
+            }
+        }
+
+        $responses = $client->pool(
+            fn (Pool $pool) => array_map(
+                fn (AsyncRequest $request) => $pool->{$request->method}($this->baseUrl.$request->uri),
+                $asyncRequests
+            )
+        );
+
+        foreach ($responses as $response) {
+            $this->checkResponse($response);
+        }
+
+        return $responses;
+    }
+
+    /**
+     * @throws ClientErrorException
+     * @throws ServerErrorException
+     */
     private function execute(array $data = []): Response
     {
         $client = (clone $this->client)->withHeaders($this->headers);
@@ -105,37 +162,7 @@ abstract class BaseClient
 
         $this->resetClient();
 
-        if ($response->serverError()) {
-            Log::alert(
-                sprintf(
-                    '%s: %d status. Body: %s',
-                    get_class($this),
-                    $response->status(),
-                    $response->body()
-                )
-            );
-
-            throw new ServerErrorException(
-                $response->json('message'),
-                $response->status()
-            );
-        }
-
-        if ($response->clientError() && $this->failOnClientErrors) {
-            Log::alert(
-                sprintf(
-                    '%s: %d status. Body: %s',
-                    get_class($this),
-                    $response->status(),
-                    $response->body()
-                )
-            );
-
-            throw new ClientErrorException(
-                $response->json('message'),
-                $response->status()
-            );
-        }
+        $this->checkResponse($response);
 
         return $response;
     }
@@ -173,5 +200,44 @@ abstract class BaseClient
         $this->url = null;
         $this->headers = [];
         $this->attachments = [];
+    }
+
+    /**
+     * @throws ClientErrorException
+     * @throws ServerErrorException
+     */
+    private function checkResponse(Response $response): void
+    {
+        if ($response->serverError()) {
+            Log::alert(
+                sprintf(
+                    '%s: %d status. Body: %s',
+                    get_class($this),
+                    $response->status(),
+                    $response->body()
+                )
+            );
+
+            throw new ServerErrorException(
+                $response->json('message'),
+                $response->status()
+            );
+        }
+
+        if ($response->clientError() && $this->failOnClientErrors) {
+            Log::alert(
+                sprintf(
+                    '%s: %d status. Body: %s',
+                    get_class($this),
+                    $response->status(),
+                    $response->body()
+                )
+            );
+
+            throw new ClientErrorException(
+                $response->json('message'),
+                $response->status()
+            );
+        }
     }
 }

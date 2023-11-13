@@ -47,7 +47,7 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
     public function dealers(): array
     {
         return $this->get('v1/dealers')->json();
-    }
+    } // TODO: server error when 4xx
 
     public function products(): array
     {
