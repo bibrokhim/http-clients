@@ -2,6 +2,7 @@
 
 namespace Bibrokhim\HttpClients\Clients;
 
+use App\Models\User;
 use Bibrokhim\HttpClients\AsyncRequest;
 use Bibrokhim\HttpClients\Exceptions\ClientErrorException;
 use Bibrokhim\HttpClients\Exceptions\ServerErrorException;
@@ -147,6 +148,15 @@ abstract class BaseClient
         }
 
         return $responses;
+    }
+
+    public function fromUser(User $user): self
+    {
+        return $this->withHeaders([
+            'X-User-ID' => $user->id,
+            'X-User-Type' => 'User',
+            'X-User-Platform' => 'web',
+        ]);
     }
 
     /**
