@@ -29,6 +29,9 @@ return [
     'one_c' => [
         'base_url' => env('ONE_C_BASE_URL'),
     ],
+    'api_gateway' => [
+        'base_url' => env('API_GATEWAY_BASE_URL'),
+    ],
 
     'cache' => env('HTTP_CLIENT_CACHE', false),
 ];

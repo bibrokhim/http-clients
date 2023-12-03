@@ -2,6 +2,7 @@
 
 namespace Bibrokhim\HttpClients;
 
+use Bibrokhim\HttpClients\Clients\ApiGateway\ApiGatewayClient;
 use Bibrokhim\HttpClients\Clients\CRM\CrmCacheClient;
 use Bibrokhim\HttpClients\Clients\CRM\CrmClient;
 use Bibrokhim\HttpClients\Clients\CRM\CrmClientInterface;
@@ -70,6 +71,12 @@ class HttpClientsServiceProvider extends ServiceProvider
         $this->app->bind(OneCClient::class, function () {
             return new OneCClient(
                 config('http_clients.one_c.base_url'),
+            );
+        });
+
+        $this->app->bind(ApiGatewayClient::class, function () {
+            return new OneCClient(
+                config('http_clients.api_gateway.base_url'),
             );
         });
     }
