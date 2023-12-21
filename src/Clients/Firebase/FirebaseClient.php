@@ -42,7 +42,7 @@ class FirebaseClient extends BaseClient implements FirebaseClientInterface
     public function subscribeToTopics(array $tokens, array $topics): void
     {
         $this->post(
-            "/fcm/app/$this->appName/subscribe",
+            "/fcm/app/$this->appName/topic/subscribe",
             compact('tokens', 'topics')
         );
     }
@@ -50,7 +50,7 @@ class FirebaseClient extends BaseClient implements FirebaseClientInterface
     public function unsubscribeFromTopics(array $tokens, array $topics): void
     {
         $this->post(
-            "/fcm/app/$this->appName/unsubscribe",
+            "/fcm/app/$this->appName/topic/unsubscribe",
             compact('tokens', 'topics')
         );
     }
@@ -58,7 +58,7 @@ class FirebaseClient extends BaseClient implements FirebaseClientInterface
     public function unsubscribeFromAllTopics(array $tokens): void
     {
         $this->post(
-            "/fcm/app/$this->appName/unsubscribe-from-all",
+            "/fcm/app/$this->appName/topic/unsubscribe-from-all",
             compact('tokens')
         );
     }
