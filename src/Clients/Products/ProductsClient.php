@@ -97,4 +97,9 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
     {
         return $this->get("v1/merch-products/$merchProductId/warehouses")->json();
     }
+
+    public function warehouse(string $warehouseId): array
+    {
+        return $this->get("v1/common/warehouses/$warehouseId")->json();
+    }
 }

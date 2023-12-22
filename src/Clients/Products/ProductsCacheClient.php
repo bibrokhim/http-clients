@@ -232,4 +232,17 @@ class ProductsCacheClient extends ProductsClient
             self::TTL
         );
     }
+
+    public function warehouse(string $warehouseId): array
+    {
+        $key = self::PREFIX . __FUNCTION__ . ".$warehouseId";
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::warehouse($warehouseId),
+            self::TTL
+        );
+    }
 }
