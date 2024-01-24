@@ -102,4 +102,9 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
     {
         return $this->get("v1/common/warehouses/$warehouseId")->json();
     }
+
+    public function usdRate(): string
+    {
+        return $this->get("currencies/usd-rate")->json('multiplicity');
+    }
 }

@@ -39,4 +39,6 @@ interface ProductsClientInterface
     public function merchProductStock(string $merchProductId): array;
 
     public function warehouse(string $warehouseId): array;
+
+    public function usdRate(): string;
 }

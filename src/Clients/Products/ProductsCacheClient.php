@@ -245,4 +245,17 @@ class ProductsCacheClient extends ProductsClient
             self::TTL
         );
     }
+
+    public function usdRate(): string
+    {
+        $key = self::PREFIX . __FUNCTION__;
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::usdRate(),
+            self::TTL
+        );
+    }
 }

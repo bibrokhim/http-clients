@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Cache;
 
 class CacheHelper
 {
-    public static function store(string $key, array $data, int $seconds): array
+    public static function store(string $key, array|string $data, int $seconds): array|string
     {
         $lock = Cache::lock($key, 10);
 
