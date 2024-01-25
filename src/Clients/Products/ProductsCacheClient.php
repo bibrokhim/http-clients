@@ -246,7 +246,7 @@ class ProductsCacheClient extends ProductsClient
         );
     }
 
-    public function usdRate(): string
+    public function usdRate(): ?string
     {
         $key = self::PREFIX . __FUNCTION__;
 

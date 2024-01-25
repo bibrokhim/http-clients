@@ -40,5 +40,5 @@ interface ProductsClientInterface
 
     public function warehouse(string $warehouseId): array;
 
-    public function usdRate(): string;
+    public function usdRate(): ?string;
 }
