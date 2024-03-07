@@ -22,6 +22,11 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
         return $this->get('v1/merch-categories')->json();
     }
 
+    public function applianceCategories(): array
+    {
+        return $this->get('v1/asaxiy/categories')->json();
+    }
+
     public function categoryProducts(string $productCategoryId): array
     {
         return $this->get("v1/product-categories/$productCategoryId/products", request()->query())->json();
@@ -42,6 +47,11 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
         $queryString = '["' . implode('","', $merchCategories) . '"]';
 
         return $this->get("v1/merch-categories-ids/merch-products?category_ids=$queryString")->json();
+    }
+
+    public function categoryApplianceProducts(string $applianceCategoryId): array
+    {
+        return $this->get("v1/asaxiy/categories/$applianceCategoryId/products", request()->query())->json();
     }
 
     public function dealers(): array
@@ -86,6 +96,11 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
     public function merchProduct(string $merchProductId): array
     {
         return $this->get("v1/merch-products/$merchProductId")->json();
+    }
+
+    public function applianceProduct(string $applianceProductId): array
+    {
+        return $this->get("v1/asaxiy/products/$applianceProductId")->json();
     }
 
     public function productStock(string $productId): array

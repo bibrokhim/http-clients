@@ -49,6 +49,19 @@ class ProductsCacheClient extends ProductsClient
         );
     }
 
+    public function applianceCategories(): array
+    {
+        $key = self::PREFIX . __FUNCTION__;
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::applianceCategories(),
+            self::TTL
+        );
+    }
+
     public function categoryProducts(string $productCategoryId): array
     {
         $key = self::PREFIX . __FUNCTION__ . ".$productCategoryId." . request()->getQueryString();
@@ -97,6 +110,19 @@ class ProductsCacheClient extends ProductsClient
         return CacheHelper::store(
             $key,
             parent::categoriesMerchProducts($merchCategories),
+            self::TTL
+        );
+    }
+
+    public function categoryApplianceProducts(string $applianceCategoryId): array
+    {
+        $key = self::PREFIX . __FUNCTION__ . ".$applianceCategoryId." . request()->getQueryString();
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::categoryApplianceProducts($applianceCategoryId),
             self::TTL
         );
     }
@@ -203,6 +229,19 @@ class ProductsCacheClient extends ProductsClient
         return CacheHelper::store(
             $key,
             parent::merchProduct($merchProductId),
+            self::TTL
+        );
+    }
+
+    public function applianceProduct(string $applianceProductId): array
+    {
+        $key = self::PREFIX . __FUNCTION__ . ".$applianceProductId";
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::applianceProduct($applianceProductId),
             self::TTL
         );
     }
