@@ -24,7 +24,7 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
 
     public function applianceCategories(): array
     {
-        return $this->get('v1/asaxiy/categories')->json();
+        return $this->get('v1/appliances/categories')->json();
     }
 
     public function categoryProducts(string $productCategoryId): array
@@ -51,7 +51,7 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
 
     public function categoryApplianceProducts(string $applianceCategoryId): array
     {
-        return $this->get("v1/asaxiy/categories/$applianceCategoryId/products", request()->query())->json();
+        return $this->get("v1/appliances/categories/$applianceCategoryId/products", request()->query())->json();
     }
 
     public function dealers(): array
@@ -100,7 +100,7 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
 
     public function applianceProduct(string $applianceProductId): array
     {
-        return $this->get("v1/asaxiy/products/$applianceProductId")->json();
+        return $this->get("v1/appliances/products/$applianceProductId")->json();
     }
 
     public function productStock(string $productId): array
