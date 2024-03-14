@@ -246,6 +246,19 @@ class ProductsCacheClient extends ProductsClient
         );
     }
 
+    public function applianceProductSearch(string $search): array
+    {
+        $key = self::PREFIX . __FUNCTION__ . ".$search";
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::applianceProductSearch($search),
+            self::TTL
+        );
+    }
+
     public function productStock(string $productId): array
     {
         $key = self::PREFIX . __FUNCTION__ . ".$productId";
