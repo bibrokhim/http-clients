@@ -246,15 +246,15 @@ class ProductsCacheClient extends ProductsClient
         );
     }
 
-    public function applianceProductSearch(string $search): array
+    public function applianceProductSearch(): array
     {
-        $key = self::PREFIX . __FUNCTION__ . ".$search";
+        $key = self::PREFIX . __FUNCTION__ . '.' . request()->getQueryString();
 
         if (Cache::has($key)) return Cache::get($key);
 
         return CacheHelper::store(
             $key,
-            parent::applianceProductSearch($search),
+            parent::applianceProductSearch(),
             self::TTL
         );
     }

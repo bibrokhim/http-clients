@@ -40,7 +40,7 @@ interface ProductsClientInterface
 
     public function applianceProduct(string $applianceProductId): array;
 
-    public function applianceProductSearch(string $search): array;
+    public function applianceProductSearch(): array;
 
     public function productStock(string $productId): array;
 

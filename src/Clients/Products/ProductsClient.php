@@ -103,9 +103,9 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
         return $this->get("v1/appliances/products/$applianceProductId")->json();
     }
 
-    public function applianceProductSearch(string $search): array
+    public function applianceProductSearch(): array
     {
-        return $this->get("v1/appliances/products-search/$search")->json();
+        return $this->get('v1/appliances/products-search', request()->query())->json();
     }
 
     public function productStock(string $productId): array
