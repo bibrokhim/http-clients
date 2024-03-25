@@ -29,6 +29,8 @@ class CrmClient extends BaseClient implements CrmClientInterface
             'X-User-ID' => $device->user_id,
             'X-User-Type' => 'Master',
             'X-User-Platform' => $device->platform,
+            'X-Build' => request()->header('X-Build'),
+            'X-Version' => request()->header('X-Version'),
         ]);
     }
 }
