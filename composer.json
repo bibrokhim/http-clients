@@ -24,6 +24,6 @@
     "minimum-stability": "stable",
     "require": {
         "php": "^8.2",
-        "illuminate/support": "^10"
+        "illuminate/support": "^10|^11"
     }
 }
