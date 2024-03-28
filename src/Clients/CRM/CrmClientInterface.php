@@ -9,4 +9,6 @@ interface CrmClientInterface
     public function regions(): array;
 
     public function cities(string $regionId): array;
+
+    public function customer(int $customerId): array;
 }

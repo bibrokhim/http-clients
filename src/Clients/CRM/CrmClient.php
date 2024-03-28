@@ -20,7 +20,7 @@ class CrmClient extends BaseClient implements CrmClientInterface
 
     public function cities(string $regionId): array
     {
-        return $this->get("v1/regions/{$regionId}/cities")->json();
+        return $this->get("v1/regions/$regionId/cities")->json();
     }
 
     public function fromEpaUstaDevice(Device $device): self
@@ -32,5 +32,10 @@ class CrmClient extends BaseClient implements CrmClientInterface
             'X-Build' => request()->header('X-Build'),
             'X-Version' => request()->header('X-Version'),
         ]);
+    }
+
+    public function customer(int $customerId): array
+    {
+        return $this->get("v1/customers/$customerId")->json();
     }
 }
