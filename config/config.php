@@ -32,6 +32,9 @@ return [
     'api_gateway' => [
         'base_url' => env('API_GATEWAY_BASE_URL'),
     ],
+    'rating' => [
+        'base_url' => env('RATING_BASE_URL'),
+    ],
 
     'cache' => env('HTTP_CLIENT_CACHE', false),
 ];

@@ -15,6 +15,7 @@ use Bibrokhim\HttpClients\Clients\OneC\OneCClient;
 use Bibrokhim\HttpClients\Clients\Products\ProductsCacheClient;
 use Bibrokhim\HttpClients\Clients\Products\ProductsClient;
 use Bibrokhim\HttpClients\Clients\Products\ProductsClientInterface;
+use Bibrokhim\HttpClients\Clients\Rating\RatingClient;
 use Bibrokhim\HttpClients\Clients\SMS\SmsClientInterface;
 use Bibrokhim\HttpClients\Clients\SMS\SmsDevClient;
 use Bibrokhim\HttpClients\Clients\SMS\SmsGatewayClient;
@@ -75,8 +76,14 @@ class HttpClientsServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(ApiGatewayClient::class, function () {
-            return new OneCClient(
+            return new ApiGatewayClient(
                 config('http_clients.api_gateway.base_url'),
+            );
+        });
+
+        $this->app->bind(RatingClient::class, function () {
+            return new RatingClient(
+                config('http_clients.rating.base_url'),
             );
         });
     }
