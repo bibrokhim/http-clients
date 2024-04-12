@@ -8,11 +8,11 @@ class RatingClient extends BaseClient
 {
     public function responded(string $uid)
     {
-        return $this->post("v1/ratings/$uid/responded")->json();
+        return $this->post("ratings/$uid/responded")->json();
     }
 
     public function rate(string $uid, array $attrs)
     {
-        return $this->patch("v1/ratings/$uid", $attrs)->json();
+        return $this->patch("ratings/$uid", $attrs)->json();
     }
 }
