@@ -219,7 +219,7 @@ abstract class BaseClient
     private function checkResponse(Response $response): void
     {
         if ($response->serverError()) {
-            Log::alert(
+            Log::notice(
                 sprintf(
                     '%s: %d status. Body: %s',
                     get_class($this),
@@ -235,7 +235,7 @@ abstract class BaseClient
         }
 
         if ($response->clientError() && $this->failOnClientErrors) {
-            Log::alert(
+            Log::notice(
                 sprintf(
                     '%s: %d status. Body: %s',
                     get_class($this),
