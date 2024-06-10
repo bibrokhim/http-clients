@@ -35,6 +35,9 @@ return [
     'rating' => [
         'base_url' => env('RATING_BASE_URL'),
     ],
+    'service_crm' => [
+        'base_url' => env('SERVICE_CRM_BASE_URL'),
+    ],
 
     'cache' => env('HTTP_CLIENT_CACHE', false),
 ];
