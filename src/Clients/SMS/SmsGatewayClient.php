@@ -10,4 +10,9 @@ class SmsGatewayClient extends BaseClient implements SmsClientInterface
     {
         $this->post('/send', compact('phoneNumber', 'message'));
     }
+
+    public function sendMany(array $phoneNumbers, string $message): void
+    {
+        $this->post('/send-many', compact('phoneNumbers', 'message'));
+    }
 }
