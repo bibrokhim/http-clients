@@ -159,6 +159,15 @@ abstract class BaseClient
         ]);
     }
 
+    public function fromBitrixUser(User $user): self
+    {
+        return $this->withHeaders([
+            'X-User-ID' => $user->bitrix_id,
+            'X-User-Type' => 'User',
+            'X-User-Platform' => 'web',
+        ]);
+    }
+
     /**
      * @throws ClientErrorException
      * @throws ServerErrorException
