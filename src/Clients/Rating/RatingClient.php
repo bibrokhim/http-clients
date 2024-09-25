@@ -18,6 +18,6 @@ class RatingClient extends BaseClient
 
     public function saveCaptures(array $captures)
     {
-        return $this->failOnClientErrors()->post("ratings/crm/bulk", $captures)->json();
+        return $this->failOnClientErrors()->post("crm/ratings/bulk", $captures)->json();
     }
 }
