@@ -15,4 +15,9 @@ class RatingClient extends BaseClient
     {
         return $this->patch("ratings/$uid", $attrs)->json();
     }
+
+    public function saveCaptures(array $captures)
+    {
+        return $this->post("ratings/crm/bulk", $captures)->json();
+    }
 }
