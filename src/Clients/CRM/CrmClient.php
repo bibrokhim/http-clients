@@ -38,4 +38,9 @@ class CrmClient extends BaseClient implements CrmClientInterface
     {
         return $this->get("v1/customers/$customerId")->json();
     }
+
+    public function getCustomerId(int $masterId): int
+    {
+        return $this->get("v1/masters/$masterId/customer")->json('customer_id');
+    }
 }

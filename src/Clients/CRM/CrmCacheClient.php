@@ -48,4 +48,14 @@ class CrmCacheClient extends CrmClient
 
         return CacheHelper::store("crm.customers.$customerId", $data, 24 * 3600);
     }
+
+    public function getCustomerId(int $masterId): int
+    {
+        if (Cache::has("crm.getCustomerId.$masterId"))
+            return Cache::get("crm.getCustomerId.$masterId");
+
+        $data = parent::getCustomerId($masterId);
+
+        return CacheHelper::store("crm.getCustomerId.$masterId", $data, 24 * 3600);
+    }
 }
