@@ -194,6 +194,19 @@ class ProductsCacheClient extends ProductsClient
         );
     }
 
+    public function sparePartSearch(string $search): array
+    {
+        $key = self::PREFIX . __FUNCTION__ . '.' . $search;
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::sparePartSearch($search),
+            self::TTL
+        );
+    }
+
     public function productCategorySearch(): array
     {
         $key = self::PREFIX . __FUNCTION__ . '.' . request()->getQueryString();
