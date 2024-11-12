@@ -39,6 +39,11 @@ class CrmClient extends BaseClient implements CrmClientInterface
         return $this->get("v1/customers/$customerId")->json();
     }
 
+    public function storeCustomer(array $attrs): array
+    {
+        return $this->post('v1/customers', $attrs)->json();
+    }
+
     public function customerByPhoneNumber(string $phoneNumber): array
     {
         return $this->get("v1/customers/phone-number/$phoneNumber")->json();

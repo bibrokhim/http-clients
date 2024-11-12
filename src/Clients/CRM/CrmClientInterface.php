@@ -12,6 +12,8 @@ interface CrmClientInterface
 
     public function customer(int $customerId): array;
 
+    public function storeCustomer(array $attrs): array;
+
     public function customerByPhoneNumber(string $phoneNumber): array;
 
     public function getCustomerId(int $masterId): int;
