@@ -4,6 +4,7 @@ namespace Bibrokhim\HttpClients\Clients\Media;
 
 use Bibrokhim\HttpClients\Clients\BaseClient;
 use Illuminate\Http\UploadedFile;
+use LogicException;
 
 class MediaClient extends BaseClient
 {
@@ -42,6 +43,22 @@ class MediaClient extends BaseClient
     {
         $response = $this
             ->delete("/images/$imageId");
+
+        return $response->json();
+    }
+
+    public function deleteManyImages(array $imageIds): array
+    {
+        foreach ($imageIds as $imageId) {
+            if (! is_numeric($imageId)) {
+                throw new LogicException('Image IDs should be numeric');
+            }
+        }
+
+        $ids = implode(',', $imageIds);
+
+        $response = $this
+            ->delete("/images-many?ids=$ids");
 
         return $response->json();
     }
