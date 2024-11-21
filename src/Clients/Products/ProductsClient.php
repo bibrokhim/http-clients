@@ -96,7 +96,7 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
             'filter' => [
                 'id' => implode(',', $ids),
             ]
-        ])->json();
+        ])->json('data');
     }
 
     public function productCategorySearch(): array
