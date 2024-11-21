@@ -34,6 +34,8 @@ interface ProductsClientInterface
 
     public function sparePartSearch(string $search): array;
 
+    public function sparePartsById(array $ids): array;
+
     public function productCategorySearch(): array;
 
     public function newProducts(): array;

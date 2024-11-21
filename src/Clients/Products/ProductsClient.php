@@ -90,6 +90,15 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
         ])->json();
     }
 
+    public function sparePartsById(array $ids): array
+    {
+        return $this->get('v1/common/spare-parts', [
+            'filter' => [
+                'id' => implode(',', $ids),
+            ]
+        ])->json();
+    }
+
     public function productCategorySearch(): array
     {
         return $this->get('v1/product-categories-search', request()->query())->json();
