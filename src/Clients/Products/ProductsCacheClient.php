@@ -194,6 +194,19 @@ class ProductsCacheClient extends ProductsClient
         );
     }
 
+    public function paginateProducts(): array
+    {
+        $key = self::PREFIX . __FUNCTION__ . '.' . request()->input('page');
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::paginateProducts(),
+            self::TTL
+        );
+    }
+
     public function sparePartSearch(string $search): array
     {
         $key = self::PREFIX . __FUNCTION__ . '.' . $search;

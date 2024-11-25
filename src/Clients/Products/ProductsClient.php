@@ -81,6 +81,11 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
         return $this->get('v1/products-search', request()->query())->json();
     }
 
+    public function paginateProducts(): array
+    {
+        return $this->get('v1/common/products?pagination=1&page='.request()->input('page'))->json();
+    }
+
     public function sparePartSearch(string $search): array
     {
         return $this->get('v1/common/spare-parts', [
