@@ -98,6 +98,14 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
         ])->json();
     }
 
+    public function paginateSpareParts(): array
+    {
+        return $this->get('v1/common/spare-parts', [
+            'pagination' => 1,
+            'page' => request()->input('page', 1),
+        ])->json();
+    }
+
     public function sparePartsById(array $ids): array
     {
         return $this->get('v1/common/spare-parts', [

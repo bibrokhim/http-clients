@@ -220,6 +220,19 @@ class ProductsCacheClient extends ProductsClient
         );
     }
 
+    public function paginateSpareParts(): array
+    {
+        $key = self::PREFIX . __FUNCTION__ . '.' . request()->input('page');
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::paginateSpareParts(),
+            self::TTL
+        );
+    }
+
     public function sparePartsById(array $ids): array
     {
         $key = self::PREFIX . __FUNCTION__ . '.' . implode('-', $ids);
