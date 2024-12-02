@@ -32,6 +32,8 @@ interface ProductsClientInterface
 
     public function productSearch(): array;
 
+    public function serviceCostSearch(): array;
+
     public function paginateProducts(): array;
 
     public function sparePartSearch(string $search): array;
