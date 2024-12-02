@@ -81,9 +81,13 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
         return $this->get('v1/products-search', request()->query())->json();
     }
 
-    public function serviceCostSearch(): array
+    public function serviceCostSearch(string $search): array
     {
-        return $this->get('v1/service/service-costs', request()->query())->json();
+        return $this->get('v1/service/service-costs', [
+            'filter' => [
+                'name' => $search,
+            ]
+        ])->json();
     }
 
     public function paginateProducts(): array
