@@ -124,7 +124,7 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
         ])->json();
     }
 
-    public function customerCostsById(array $ids): array
+    public function serviceCostsById(array $ids): array
     {
         return $this->get('v1/service/service-costs', [
             'filter' => [

@@ -259,7 +259,7 @@ class ProductsCacheClient extends ProductsClient
         );
     }
 
-    public function customerCostsById(array $ids): array
+    public function serviceCostsById(array $ids): array
     {
         $key = self::PREFIX . __FUNCTION__ . '.' . implode('-', $ids);
 
@@ -267,7 +267,7 @@ class ProductsCacheClient extends ProductsClient
 
         return CacheHelper::store(
             $key,
-            parent::customerCostsById($ids),
+            parent::serviceCostsById($ids),
             self::TTL
         );
     }
