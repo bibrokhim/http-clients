@@ -28,4 +28,15 @@ class ServiceCrmClient extends BaseClient
             'X-Version' => request()->header('X-Version'),
         ]);
     }
+
+    public function fromServiceTablet(Device $device): self
+    {
+        return $this->withHeaders([
+            'X-User-ID' => $device->user_id,
+            'X-User-Type' => 'Service',
+            'X-User-Platform' => $device->platform,
+            'X-Build' => request()->header('X-Build'),
+            'X-Version' => request()->header('X-Version'),
+        ]);
+    }
 }
