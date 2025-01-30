@@ -63,4 +63,6 @@ interface ProductsClientInterface
     public function warehouse(string $warehouseId): array;
 
     public function usdRate(): ?string;
+
+    public function getCommissioner(string $cardNumber): ?array;
 }

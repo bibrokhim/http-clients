@@ -401,4 +401,17 @@ class ProductsCacheClient extends ProductsClient
             self::TTL
         );
     }
+
+    public function getCommissioner(string $cardNumber): ?array
+    {
+        $key = self::PREFIX . __FUNCTION__;
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::getCommissioner($cardNumber),
+            self::TTL
+        );
+    }
 }

@@ -182,4 +182,15 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
     {
         return $this->get("currencies/usd-rate")->json('multiplicity');
     }
+
+    public function getCommissioner(string $cardNumber): ?array
+    {
+        $response = $this->get("v1/common/comissioner-card-number/$cardNumber");
+
+        if ($response->status() !== 200) {
+            return null;
+        }
+
+        return $response->json();
+    }
 }
