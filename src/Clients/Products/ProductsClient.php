@@ -109,7 +109,7 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
 
     public function sparePartSearch(string $search): array
     {
-        return $this->get('v1/common/spare-parts', [
+        return $this->get('v1/service/spare-parts', [
             'filter' => [
                 'name' => $search,
             ]
