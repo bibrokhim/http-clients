@@ -83,7 +83,7 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
 
     public function productServiceSearch(string $name): array
     {
-        return $this->get('/v1/common/products', [
+        return $this->get('/v1/service/products', [
             'filter' => [
                 'name' => $name,
             ],
