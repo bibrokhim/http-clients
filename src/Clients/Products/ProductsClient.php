@@ -194,7 +194,9 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
 
     public function getCommissioner(string $cardNumber): ?array
     {
-        $response = $this->get("v1/common/comissioner-card-number/$cardNumber");
+        $response = $this->get("v1/common/comissioner-card-number/$cardNumber", [
+            'include' => 'dealer'
+        ]);
 
         if ($response->status() !== 200) {
             return null;
