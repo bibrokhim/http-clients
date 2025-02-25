@@ -25,10 +25,14 @@ abstract class BaseClient
     protected PendingRequest $client;
     protected bool $failOnClientErrors = false;
 
-    public function __construct(string $baseUrl, ?string $token = null)
+    public function __construct(string $baseUrl, ?string $token = null, ?int $timeout = null)
     {
         $this->client = Http::baseUrl($baseUrl);
         $this->baseUrl = $baseUrl;
+
+        if (isset($timeout)) {
+            $this->client->timeout($timeout);
+        }
 
         if (isset($token)) {
             $this->client->withToken($token);
