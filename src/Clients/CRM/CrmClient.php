@@ -34,6 +34,15 @@ class CrmClient extends BaseClient implements CrmClientInterface
         ]);
     }
 
+    public function fromMiniApp(Device $device): self
+    {
+        return $this->withHeaders([
+            'X-User-ID' => $device->user_id,
+            'X-User-Type' => 'Master',
+            'X-User-Platform' => 'web',
+        ]);
+    }
+
     public function customer(int $customerId): array
     {
         return $this->get("v1/customers/$customerId")->json();
