@@ -28,6 +28,8 @@ interface ProductsClientInterface
 
     public function productsByIds(string $productType, array $ids): array;
 
+    public function pollwonProductsByIds(array $ids): array;
+
     public function product(string $productId): array;
 
     public function productSearch(): array;

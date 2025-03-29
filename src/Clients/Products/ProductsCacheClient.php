@@ -168,6 +168,21 @@ class ProductsCacheClient extends ProductsClient
         );
     }
 
+    public function pollwonProductsByIds(array $ids): array
+    {
+        $idsKey = '["'.implode('","', $ids).'"]';
+
+        $key = self::PREFIX . __FUNCTION__ . '.' . $idsKey;
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::pollwonProductsByIds($ids),
+            self::TTL
+        );
+    }
+
     public function product(string $productId): array
     {
         $key = self::PREFIX . __FUNCTION__ . ".$productId";
