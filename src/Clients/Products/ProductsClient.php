@@ -74,8 +74,8 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
     public function pollwonProductsByIds(array $ids): array
     {
         return $this
-            ->post("v1/catalog/products", [
-                'filter' => ['id' => implode(',', $ids)],
+            ->post("v1/catalog/products-ids", [
+                'ids' => $ids,
             ])
             ->json('data');
     }
