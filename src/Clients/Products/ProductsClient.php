@@ -201,6 +201,11 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
         return $this->get("currencies/usd-rate")->json('multiplicity');
     }
 
+    public function pollwonUsdRate(): ?string
+    {
+        return $this->get("v1/finance/currencies/usd-rate")->json('data.multiplicity');
+    }
+
     public function getCommissioner(string $cardNumber): ?array
     {
         $response = $this->get("v1/common/comissioner-card-number/$cardNumber", [

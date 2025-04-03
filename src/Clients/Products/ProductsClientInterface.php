@@ -68,5 +68,7 @@ interface ProductsClientInterface
 
     public function usdRate(): ?string;
 
+    public function pollwonUsdRate(): ?string;
+
     public function getCommissioner(string $cardNumber): ?array;
 }
