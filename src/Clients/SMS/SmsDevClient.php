@@ -2,10 +2,11 @@
 
 namespace Bibrokhim\HttpClients\Clients\SMS;
 
+use Bibrokhim\HttpClients\Clients\BaseClient;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-class SmsDevClient implements SmsClientInterface
+class SmsDevClient extends BaseClient implements SmsClientInterface
 {
     public function send(string $phoneNumber, string $message): void
     {
