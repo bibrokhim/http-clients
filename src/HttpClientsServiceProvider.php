@@ -31,7 +31,7 @@ class HttpClientsServiceProvider extends ServiceProvider
         $this->app->bind(SmsClientInterface::class, fn() =>
             app()->isProduction()
                 ? new SmsGatewayClient(config('http_clients.sms.base_url'), config('http_clients.sms.token'))
-                : new SmsDevClient()
+                : new SmsDevClient(config('http_clients.sms.base_url'), config('http_clients.sms.token'))
         );
 
         $this->app->bind(FirebaseClientInterface::class, fn() =>

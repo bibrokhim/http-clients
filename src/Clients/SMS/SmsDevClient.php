@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Log;
 
 class SmsDevClient extends BaseClient implements SmsClientInterface
 {
+    public function __construct(string $baseUrl, ?string $token = null, ?int $timeout = null)
+    {
+        parent::__construct($baseUrl, $token, $timeout);
+    }
+
     public function send(string $phoneNumber, string $message): void
     {
         $url = 'https://api.telegram.org/bot' . config('http_clients.sms.telegram_bot_token') . '/sendMessage';
