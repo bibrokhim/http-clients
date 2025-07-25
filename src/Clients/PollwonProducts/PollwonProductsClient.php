@@ -13,4 +13,9 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
             'resource' => 'search',
         ])->json();
     }
+
+    public function product(string $productId): array
+    {
+        return $this->get("/v1/catalog/products/$productId")->json();
+    }
 }

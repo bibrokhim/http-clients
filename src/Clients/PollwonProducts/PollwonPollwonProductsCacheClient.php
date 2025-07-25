@@ -22,4 +22,17 @@ class PollwonPollwonProductsCacheClient extends PollwonProductsClient
             self::TTL
         );
     }
+
+    public function product(string $productId): array
+    {
+        $key = self::PREFIX . __FUNCTION__ . ".$productId";
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::product($productId),
+            self::TTL
+        );
+    }
 }
