@@ -26,6 +26,9 @@ return [
     'products' => [
         'base_url' => env('PRODUCTS_BASE_URL', 'https://products.fake.uz/api'),
     ],
+    'pollwon_products' => [
+        'base_url' => env('POLLWON_PRODUCTS_BASE_URL', 'https://pollwon-products.fake.uz/api'),
+    ],
     'one_c' => [
         'base_url' => env('ONE_C_BASE_URL'),
     ],

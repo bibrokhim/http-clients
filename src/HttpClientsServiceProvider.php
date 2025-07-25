@@ -12,6 +12,7 @@ use Bibrokhim\HttpClients\Clients\Firebase\FirebaseDevClient;
 use Bibrokhim\HttpClients\Clients\Helpdesk\HelpdeskClient;
 use Bibrokhim\HttpClients\Clients\Media\MediaClient;
 use Bibrokhim\HttpClients\Clients\OneC\OneCClient;
+use Bibrokhim\HttpClients\Clients\PollwonProducts\PollwonProductsClientInterface;
 use Bibrokhim\HttpClients\Clients\Products\ProductsCacheClient;
 use Bibrokhim\HttpClients\Clients\Products\ProductsClient;
 use Bibrokhim\HttpClients\Clients\Products\ProductsClientInterface;
@@ -68,6 +69,12 @@ class HttpClientsServiceProvider extends ServiceProvider
             return config('http_clients.cache')
                 ? new ProductsCacheClient(config('http_clients.products.base_url'))
                 : new ProductsClient(config('http_clients.products.base_url'));
+        });
+
+        $this->app->bind(PollwonProductsClientInterface::class, function () {
+            return config('http_clients.cache')
+                ? new ProductsCacheClient(config('http_clients.pollwon_products.base_url'))
+                : new ProductsClient(config('http_clients.pollwon_products.base_url'));
         });
 
         $this->app->bind(OneCClient::class, function () {
