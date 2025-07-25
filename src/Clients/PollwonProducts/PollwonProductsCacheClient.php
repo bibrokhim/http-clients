@@ -5,7 +5,7 @@ namespace Bibrokhim\HttpClients\Clients\PollwonProducts;
 use Bibrokhim\HttpClients\CacheHelper;
 use Illuminate\Support\Facades\Cache;
 
-class PollwonPollwonProductsCacheClient extends PollwonProductsClient
+class PollwonProductsCacheClient extends PollwonProductsClient
 {
     private const PREFIX = 'products.';
     private const TTL = 34 * 3600;
