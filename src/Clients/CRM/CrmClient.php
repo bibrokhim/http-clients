@@ -15,7 +15,7 @@ class CrmClient extends BaseClient implements CrmClientInterface
 
     public function regions(): array
     {
-        return $this->get('v1/regions')->json();
+        return $this->get('v1/regions', request()->all())->json();
     }
 
     public function cities(string $regionId): array

@@ -21,8 +21,10 @@ class CrmCacheClient extends CrmClient
 
     public function regions(): array
     {
-        if (Cache::has('crm.regions'))
-            return Cache::get('crm.regions');
+        $key = 'crm.regions'.request()->getQueryString();
+
+        if (Cache::has($key))
+            return Cache::get($key);
 
         $data = parent::regions();
 
