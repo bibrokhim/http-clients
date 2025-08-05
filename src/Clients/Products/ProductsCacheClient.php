@@ -23,6 +23,19 @@ class ProductsCacheClient extends ProductsClient
         );
     }
 
+    public function kazakhstanCategories(): array
+    {
+        $key = self::PREFIX . __FUNCTION__;
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::kazakhstanCategories(),
+            self::TTL
+        );
+    }
+
     public function sparePartCategories(): array
     {
         $key = self::PREFIX . __FUNCTION__;
@@ -71,6 +84,19 @@ class ProductsCacheClient extends ProductsClient
         return CacheHelper::store(
             $key,
             parent::categoryProducts($productCategoryId),
+            self::TTL
+        );
+    }
+
+    public function kazakhstanCategoryProducts(string $productCategoryId): array
+    {
+        $key = self::PREFIX . __FUNCTION__ . ".$productCategoryId." . request()->getQueryString();
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::kazakhstanCategoryProducts($productCategoryId),
             self::TTL
         );
     }
@@ -196,6 +222,19 @@ class ProductsCacheClient extends ProductsClient
         );
     }
 
+    public function kazakhstanProduct(string $productId): array
+    {
+        $key = self::PREFIX . __FUNCTION__ . ".$productId";
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::kazakhstanProduct($productId),
+            self::TTL
+        );
+    }
+
     public function productSearch(): array
     {
         $key = self::PREFIX . __FUNCTION__ . '.' . request()->getQueryString();
@@ -205,6 +244,19 @@ class ProductsCacheClient extends ProductsClient
         return CacheHelper::store(
             $key,
             parent::productSearch(),
+            self::TTL
+        );
+    }
+
+    public function kazakhstanProductSearch(): array
+    {
+        $key = self::PREFIX . __FUNCTION__ . '.' . request()->getQueryString();
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::kazakhstanProductSearch(),
             self::TTL
         );
     }
@@ -387,6 +439,19 @@ class ProductsCacheClient extends ProductsClient
         return CacheHelper::store(
             $key,
             parent::productStock($productId),
+            self::TTL
+        );
+    }
+
+    public function kazakhstanProductStock(string $productId): array
+    {
+        $key = self::PREFIX . __FUNCTION__ . ".$productId";
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::kazakhstanProductStock($productId),
             self::TTL
         );
     }

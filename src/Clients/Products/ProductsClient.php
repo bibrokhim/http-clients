@@ -12,6 +12,11 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
         return $this->get('v1/product-categories', request()->query())->json();
     }
 
+    public function kazakhstanCategories(): array
+    {
+        return $this->get('v1/kz/product-categories', request()->query())->json();
+    }
+
     public function sparePartCategories(): array
     {
         return $this->get('v1/spare-part-categories')->json();
@@ -30,6 +35,11 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
     public function categoryProducts(string $productCategoryId): array
     {
         return $this->get("v1/product-categories/$productCategoryId/products", request()->query())->json();
+    }
+
+    public function kazakhstanCategoryProducts(string $productCategoryId): array
+    {
+        return $this->get("v1/kz/product-categories/$productCategoryId/products", request()->query())->json();
     }
 
     public function categorySpareParts(string $sparePartCategoryId): array
@@ -87,9 +97,19 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
         return $this->get("v1/products/$productId")->json();
     }
 
+    public function kazakhstanProduct(string $productId): array
+    {
+        return $this->get("v1/kz/products/$productId")->json();
+    }
+
     public function productSearch(): array
     {
         return $this->get('v1/products-search', request()->query())->json();
+    }
+
+    public function kazakhstanProductSearch(): array
+    {
+        return $this->get('v1/kz/products-search', request()->query())->json();
     }
 
     public function productServiceSearch(string $name): array
@@ -186,6 +206,11 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
     public function productStock(string $productId): array
     {
         return $this->get("v1/products/$productId/warehouses")->json();
+    }
+
+    public function kazakhstanProductStock(string $productId): array
+    {
+        return $this->get("v1/kz/products/$productId/warehouses")->json();
     }
 
     public function merchProductStock(string $merchProductId): array

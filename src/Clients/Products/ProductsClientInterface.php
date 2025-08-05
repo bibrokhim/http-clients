@@ -6,6 +6,8 @@ interface ProductsClientInterface
 {
     public function categories(): array;
 
+    public function kazakhstanCategories(): array;
+
     public function sparePartCategories(): array;
 
     public function merchCategories(): array;
@@ -13,6 +15,8 @@ interface ProductsClientInterface
     public function applianceCategories(): array;
 
     public function categoryProducts(string $productCategoryId): array;
+
+    public function kazakhstanCategoryProducts(string $productCategoryId): array;
 
     public function categorySpareParts(string $sparePartCategoryId): array;
 
@@ -32,7 +36,11 @@ interface ProductsClientInterface
 
     public function product(string $productId): array;
 
+    public function kazakhstanProduct(string $productId): array;
+
     public function productSearch(): array;
+
+    public function kazakhstanProductSearch(): array;
 
     public function productServiceSearch(string $name): array;
 
@@ -61,6 +69,8 @@ interface ProductsClientInterface
     public function applianceProductSearch(): array;
 
     public function productStock(string $productId): array;
+
+    public function kazakhstanProductStock(string $productId): array;
 
     public function merchProductStock(string $merchProductId): array;
 
