@@ -144,6 +144,13 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
         ])->json();
     }
 
+    public function sparePartsByIdsPost(array $ids): array
+    {
+        return $this->post('v1/common/spare-parts/by-ids', [
+            'ids' => $ids
+        ])->json();
+    }
+
     public function serviceCostsById(array $ids): array
     {
         return $this->get('v1/service/service-costs', [

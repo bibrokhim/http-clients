@@ -287,6 +287,19 @@ class ProductsCacheClient extends ProductsClient
         );
     }
 
+    public function sparePartsByIdsPost(array $ids): array
+    {
+        $key = self::PREFIX . __FUNCTION__ . '.' . implode('-', $ids);
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::sparePartsByIdsPost($ids),
+            self::TTL
+        );
+    }
+
     public function serviceCostsById(array $ids): array
     {
         $key = self::PREFIX . __FUNCTION__ . '.' . implode('-', $ids);

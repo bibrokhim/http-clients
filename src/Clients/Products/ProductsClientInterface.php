@@ -46,6 +46,8 @@ interface ProductsClientInterface
 
     public function sparePartsById(array $ids): array;
 
+    public function sparePartsByIdsPost(array $ids): array;
+
     public function serviceCostsById(array $ids): array;
 
     public function productCategorySearch(): array;
