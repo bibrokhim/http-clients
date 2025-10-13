@@ -31,6 +31,42 @@ class SmsDevClient extends BaseClient implements SmsClientInterface
         }
     }
 
+    public function sendWhatsapp(string $phoneNumber, string $code): void
+    {
+        $url = 'https://api.telegram.org/bot' . config('http_clients.sms.telegram_bot_token') . '/sendMessage';
+
+        Log::info("$phoneNumber: $code by WhatsApp");
+
+        if (! app()->environment('testing')) {
+
+            foreach (explode(',', config('http_clients.sms.telegram_chats')) as $chatId) {
+                Http::get($url, [
+                    'chat_id' => trim($chatId),
+                    'text' => "$phoneNumber: $code by WhatsApp"
+                ]);
+            }
+
+        }
+    }
+
+    public function sendTelegram(string $phoneNumber, string $code): void
+    {
+        $url = 'https://api.telegram.org/bot' . config('http_clients.sms.telegram_bot_token') . '/sendMessage';
+
+        Log::info("$phoneNumber: $code by Telegram");
+
+        if (! app()->environment('testing')) {
+
+            foreach (explode(',', config('http_clients.sms.telegram_chats')) as $chatId) {
+                Http::get($url, [
+                    'chat_id' => trim($chatId),
+                    'text' => "$phoneNumber: $code by Telegram"
+                ]);
+            }
+
+        }
+    }
+
     public function sendMany(array $phoneNumbers, string $message): void
     {
         $url = 'https://api.telegram.org/bot' . config('http_clients.sms.telegram_bot_token') . '/sendMessage';
