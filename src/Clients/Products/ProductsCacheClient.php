@@ -365,6 +365,19 @@ class ProductsCacheClient extends ProductsClient
         );
     }
 
+    public function serviceCostsByIdPost(array $ids): array
+    {
+        $key = self::PREFIX . __FUNCTION__ . '.' . implode('-', $ids);
+
+        if (Cache::has($key)) return Cache::get($key);
+
+        return CacheHelper::store(
+            $key,
+            parent::serviceCostsByIdPost($ids),
+            self::TTL
+        );
+    }
+
     public function productCategorySearch(): array
     {
         $key = self::PREFIX . __FUNCTION__ . '.' . request()->getQueryString();

@@ -58,6 +58,8 @@ interface ProductsClientInterface
 
     public function serviceCostsById(array $ids): array;
 
+    public function serviceCostsByIdPost(array $ids): array;
+
     public function productCategorySearch(): array;
 
     public function newProducts(): array;

@@ -180,6 +180,13 @@ class ProductsClient extends BaseClient implements ProductsClientInterface
         ])->json();
     }
 
+    public function serviceCostsByIdPost(array $ids): array
+    {
+        return $this->post('v1/service/service-costs/by-ids', [
+            'ids' => $ids
+        ])->json();
+    }
+
     public function productCategorySearch(): array
     {
         return $this->get('v1/product-categories-search', request()->query())->json();
