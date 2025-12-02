@@ -18,6 +18,7 @@ use Bibrokhim\HttpClients\Clients\Products\ProductsCacheClient;
 use Bibrokhim\HttpClients\Clients\PollwonProducts\PollwonProductsCacheClient;
 use Bibrokhim\HttpClients\Clients\Products\ProductsClient;
 use Bibrokhim\HttpClients\Clients\Products\ProductsClientInterface;
+use Bibrokhim\HttpClients\Clients\PsSap\PsSapClient;
 use Bibrokhim\HttpClients\Clients\Rating\RatingClient;
 use Bibrokhim\HttpClients\Clients\ServiceCRM\ServiceCrmClient;
 use Bibrokhim\HttpClients\Clients\SMS\SmsClientInterface;
@@ -100,6 +101,12 @@ class HttpClientsServiceProvider extends ServiceProvider
         $this->app->bind(ServiceCrmClient::class, function () {
             return new ServiceCrmClient(
                 config('http_clients.service_crm.base_url'),
+            );
+        });
+
+        $this->app->bind(PsSapClient::class, function () {
+            return new PsSapClient(
+                config('http_clients.ps_sap.base_url'),
             );
         });
     }

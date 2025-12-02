@@ -41,6 +41,9 @@ return [
     'service_crm' => [
         'base_url' => env('SERVICE_CRM_BASE_URL', 'https://service-crm.fake.uz/api'),
     ],
+    'ps_sap' => [
+        'base_url' => env('PS_SAP_BASE_URL', 'https://ps-sap.fake.uz/api'),
+    ],
 
     'cache' => env('HTTP_CLIENT_CACHE', false),
 ];
