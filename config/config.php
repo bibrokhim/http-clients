@@ -44,6 +44,9 @@ return [
     'ps_sap' => [
         'base_url' => env('PS_SAP_BASE_URL', 'https://ps-sap.fake.uz/api'),
     ],
+    'epamarket' => [
+        'base_url' => env('EPAMARKET_BASE_URL', 'https://epamarket.fake.uz/api'),
+    ],
 
     'cache' => env('HTTP_CLIENT_CACHE', false),
 ];
