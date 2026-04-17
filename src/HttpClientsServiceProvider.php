@@ -90,6 +90,7 @@ class HttpClientsServiceProvider extends ServiceProvider
         $this->app->bind(ApiGatewayClient::class, function () {
             return new ApiGatewayClient(
                 config('http_clients.api_gateway.base_url'),
+                config('http_clients.api_gateway.token')
             );
         });
 

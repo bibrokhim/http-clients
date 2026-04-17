@@ -34,6 +34,7 @@ return [
     ],
     'api_gateway' => [
         'base_url' => env('API_GATEWAY_BASE_URL', 'https://gateway.fake.uz/api'),
+        'token' => env('API_GATEWAY_TOKEN'),
     ],
     'rating' => [
         'base_url' => env('RATING_BASE_URL', 'https://rating.fake.uz/api'),
