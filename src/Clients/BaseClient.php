@@ -6,6 +6,7 @@ use App\Models\User;
 use Bibrokhim\HttpClients\AsyncRequest;
 use Bibrokhim\HttpClients\Exceptions\ClientErrorException;
 use Bibrokhim\HttpClients\Exceptions\ServerErrorException;
+use GuzzleHttp\Psr7\Utils;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Pool;
 use Illuminate\Http\Client\Response;
@@ -201,14 +202,14 @@ abstract class BaseClient
                 foreach ($attachment as $key => $item) {
                     $client->attach(
                         $name . '[' . $key . ']',
-                        $item->openFile(),
+                        Utils::tryFopen($item->getRealPath(), 'rb'),
                         $item->getClientOriginalName()
                     );
                 }
             } else {
                 $client->attach(
                     $name,
-                    $attachment->openFile(),
+                    Utils::tryFopen($attachment->getRealPath(), 'rb'),
                     $attachment->getClientOriginalName()
                 );
             }
