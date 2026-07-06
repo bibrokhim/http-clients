@@ -48,6 +48,9 @@ return [
     'epamarket' => [
         'base_url' => env('EPAMARKET_BASE_URL', 'https://epamarket.fake.uz/api'),
     ],
+    'pos' => [
+        'base_url' => env('POS_BASE_URL', 'http://epa-pos-api.test/api'),
+    ],
 
     'cache' => env('HTTP_CLIENT_CACHE', false),
 ];

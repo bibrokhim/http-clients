@@ -14,6 +14,7 @@ use Bibrokhim\HttpClients\Clients\Media\MediaClient;
 use Bibrokhim\HttpClients\Clients\OneC\OneCClient;
 use Bibrokhim\HttpClients\Clients\PollwonProducts\PollwonProductsClient;
 use Bibrokhim\HttpClients\Clients\PollwonProducts\PollwonProductsClientInterface;
+use Bibrokhim\HttpClients\Clients\Pos\PosClient;
 use Bibrokhim\HttpClients\Clients\Products\ProductsCacheClient;
 use Bibrokhim\HttpClients\Clients\PollwonProducts\PollwonProductsCacheClient;
 use Bibrokhim\HttpClients\Clients\Products\ProductsClient;
@@ -114,6 +115,11 @@ class HttpClientsServiceProvider extends ServiceProvider
         $this->app->bind(EpamarketClient::class, function () {
             return new EpamarketClient(
                 config('http_clients.epamarket.base_url'),
+            );
+        });
+        $this->app->bind(PosClient::class, function () {
+            return new PosClient(
+                config('http_clients.pos.base_url'),
             );
         });
     }
