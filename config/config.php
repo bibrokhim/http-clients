@@ -51,6 +51,9 @@ return [
     'pos' => [
         'base_url' => env('POS_BASE_URL', 'http://epa-pos-api.test/api'),
     ],
+    'pollwon_site' => [
+        'base_url' => env('POLLWON_SITE_BASE_URL', 'https://pollwon-site.fake.uz/api'),
+    ],
 
     'cache' => env('HTTP_CLIENT_CACHE', false),
 ];

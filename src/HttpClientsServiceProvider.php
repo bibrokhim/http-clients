@@ -14,6 +14,7 @@ use Bibrokhim\HttpClients\Clients\Media\MediaClient;
 use Bibrokhim\HttpClients\Clients\OneC\OneCClient;
 use Bibrokhim\HttpClients\Clients\PollwonProducts\PollwonProductsClient;
 use Bibrokhim\HttpClients\Clients\PollwonProducts\PollwonProductsClientInterface;
+use Bibrokhim\HttpClients\Clients\PollwonSite\PollwonSiteClient;
 use Bibrokhim\HttpClients\Clients\Pos\PosClient;
 use Bibrokhim\HttpClients\Clients\Products\ProductsCacheClient;
 use Bibrokhim\HttpClients\Clients\PollwonProducts\PollwonProductsCacheClient;
@@ -120,6 +121,11 @@ class HttpClientsServiceProvider extends ServiceProvider
         $this->app->bind(PosClient::class, function () {
             return new PosClient(
                 config('http_clients.pos.base_url'),
+            );
+        });
+        $this->app->bind(PollwonSiteClient::class, function () {
+            return new PollwonSiteClient(
+                config('http_clients.pollwon_site.base_url'),
             );
         });
     }
