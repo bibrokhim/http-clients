@@ -10,15 +10,15 @@ class PollwonProductsCacheClient extends PollwonProductsClient
     private const PREFIX = 'products.';
     private const TTL = 34 * 3600;
 
-    public function productServiceSearch(string $name): array
+    public function productServiceSearch(string $name = '', array $parameters = []): array
     {
-        $key = self::PREFIX . __FUNCTION__ . '.' . $name;
+        $key = self::PREFIX . __FUNCTION__ . '.' . md5(serialize([$name, $parameters]));
 
         if (Cache::has($key)) return Cache::get($key);
 
         return CacheHelper::store(
             $key,
-            parent::productServiceSearch($name),
+            parent::productServiceSearch($name, $parameters),
             self::TTL
         );
     }

@@ -4,7 +4,7 @@ namespace Bibrokhim\HttpClients\Clients\PollwonProducts;
 
 interface PollwonProductsClientInterface
 {
-    public function productServiceSearch(string $name): array;
+    public function productServiceSearch(string $name = '', array $parameters = []): array;
 
     public function product(string $productId): array;
 

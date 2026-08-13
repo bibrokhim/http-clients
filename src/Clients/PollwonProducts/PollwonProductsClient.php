@@ -6,12 +6,12 @@ use Bibrokhim\HttpClients\Clients\BaseClient;
 
 class PollwonProductsClient extends BaseClient implements PollwonProductsClientInterface
 {
-    public function productServiceSearch(string $name): array
+    public function productServiceSearch(string $name = '', array $parameters = []): array
     {
-        return $this->get('/v1/catalog/products-search', [
+        return $this->get('/v1/admin/products/search', array_filter([
+            ...$parameters,
             's' => $name,
-            'resource' => 'search',
-        ])->json();
+        ], fn (mixed $value) => $value !== null))->json();
     }
 
     public function product(string $productId): array
@@ -22,7 +22,7 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
     public function productsByIds(string $productType = '', array $ids = []): array
     {
         return $this
-            ->post("v1/catalog/products-collection", [
+            ->post('/v1/admin/products/by-ids', [
                 'filter' => [
                     'id' => $ids,
                 ],
