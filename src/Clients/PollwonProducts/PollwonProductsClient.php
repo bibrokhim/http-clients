@@ -29,4 +29,11 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
             ])
             ->json('data');
     }
+
+    public function productExists(string $productId): array
+    {
+        return $this->get(
+            "pollwon-site/v1/admin/products/{$productId}/exists"
+        )->json('data');
+    }
 }
