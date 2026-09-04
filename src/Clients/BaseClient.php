@@ -17,13 +17,17 @@ use Illuminate\Support\Facades\Log;
 abstract class BaseClient
 {
     protected ?string $method;
+
     protected ?string $url;
+
     protected string $baseUrl;
-    protected array $headers = [
-        'Accept' => 'application/json',
-    ];
+
+    protected array $headers = [];
+
     protected array $attachments = [];
+
     protected PendingRequest $client;
+
     protected bool $failOnClientErrors = false;
 
     public function __construct(string $baseUrl, ?string $token = null, ?int $timeout = null)
@@ -39,10 +43,7 @@ abstract class BaseClient
             $this->client->withToken($token);
         }
 
-        $this->headers = array_merge(
-            $this->headers,
-            ['Accept-Language' => app()->getLocale()]
-        );
+        $this->headers = $this->defaultHeaders();
     }
 
     /**
@@ -201,7 +202,7 @@ abstract class BaseClient
             if (is_array($attachment)) {
                 foreach ($attachment as $key => $item) {
                     $client->attach(
-                        $name . '[' . $key . ']',
+                        $name.'['.$key.']',
                         Utils::tryFopen($item->getRealPath(), 'rb'),
                         $item->getClientOriginalName()
                     );
@@ -222,8 +223,16 @@ abstract class BaseClient
     {
         $this->method = null;
         $this->url = null;
-        $this->headers = [];
+        $this->headers = $this->defaultHeaders();
         $this->attachments = [];
+    }
+
+    private function defaultHeaders(): array
+    {
+        return [
+            'Accept' => 'application/json',
+            'Accept-Language' => app()->getLocale(),
+        ];
     }
 
     /**
