@@ -28,6 +28,11 @@ return [
     ],
     'pollwon_products' => [
         'base_url' => env('POLLWON_PRODUCTS_BASE_URL', 'https://pollwon-products.fake.uz/api'),
+
+        'site_categories_cache_ttl' => env(
+            'POLLWON_SITE_CATEGORIES_CACHE_TTL',
+            env('POLLWON_PRODUCTS_SITE_CATEGORIES_CACHE_TTL', 300)
+        ),
     ],
     'one_c' => [
         'base_url' => env('ONE_C_BASE_URL'),

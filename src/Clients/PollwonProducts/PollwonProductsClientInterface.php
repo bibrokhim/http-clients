@@ -14,4 +14,6 @@ interface PollwonProductsClientInterface
      * @return array{id?: string, exists?: bool}
      */
     public function productExists(string $productId): array;
+
+    public function siteCategories(?string $parentId, ?string $language = null): SiteCategoriesResponse;
 }
