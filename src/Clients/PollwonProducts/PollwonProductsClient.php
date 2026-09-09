@@ -13,12 +13,12 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
 
     public const DEFAULT_LANGUAGE = 'uz';
 
-    public function productServiceSearch(string $name = '', array $parameters = []): array
+    public function productServiceSearch(string $name): array
     {
-        return $this->get('/v1/admin/products/search', array_filter([
-            ...$parameters,
+        return $this->get('/v1/catalog/products-search', [
             's' => $name,
-        ], fn (mixed $value) => $value !== null))->json();
+            'resource' => 'search',
+        ])->json();
     }
 
     public function product(string $productId): array
@@ -27,6 +27,25 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
     }
 
     public function productsByIds(string $productType = '', array $ids = []): array
+    {
+        return $this
+            ->post('v1/catalog/products-collection', [
+                'filter' => [
+                    'id' => $ids,
+                ],
+            ])
+            ->json('data');
+    }
+
+    public function pollwonSiteProductServiceSearch(string $name = '', array $parameters = []): array
+    {
+        return $this->get('/v1/admin/products/search', array_filter([
+            ...$parameters,
+            's' => $name,
+        ], fn (mixed $value) => $value !== null))->json();
+    }
+
+    public function pollwonSiteProductsByIds(string $productType = '', array $ids = []): array
     {
         return $this
             ->post('/v1/admin/products/by-ids', [

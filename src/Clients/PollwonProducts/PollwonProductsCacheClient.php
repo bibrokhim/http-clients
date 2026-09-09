@@ -25,9 +25,9 @@ class PollwonProductsCacheClient extends PollwonProductsClient
     /** How long a waiting caller blocks before giving up on the holder. */
     private const SITE_CATEGORIES_LOCK_WAIT = 10;
 
-    public function productServiceSearch(string $name = '', array $parameters = []): array
+    public function productServiceSearch(string $name): array
     {
-        $key = self::PREFIX.__FUNCTION__.'.'.md5(serialize([$name, $parameters]));
+        $key = self::PREFIX.__FUNCTION__.'.'.$name;
 
         if (Cache::has($key)) {
             return Cache::get($key);
@@ -35,7 +35,7 @@ class PollwonProductsCacheClient extends PollwonProductsClient
 
         return CacheHelper::store(
             $key,
-            parent::productServiceSearch($name, $parameters),
+            parent::productServiceSearch($name),
             self::TTL
         );
     }
@@ -68,6 +68,38 @@ class PollwonProductsCacheClient extends PollwonProductsClient
         return CacheHelper::store(
             $key,
             parent::productsByIds($productType, $ids),
+            self::TTL
+        );
+    }
+
+    public function pollwonSiteProductServiceSearch(string $name = '', array $parameters = []): array
+    {
+        $key = self::PREFIX.__FUNCTION__.'.'.md5(serialize([$name, $parameters]));
+
+        if (Cache::has($key)) {
+            return Cache::get($key);
+        }
+
+        return CacheHelper::store(
+            $key,
+            parent::pollwonSiteProductServiceSearch($name, $parameters),
+            self::TTL
+        );
+    }
+
+    public function pollwonSiteProductsByIds(string $productType = '', array $ids = []): array
+    {
+        $idsKey = '["'.implode('","', $ids).'"]';
+
+        $key = self::PREFIX.__FUNCTION__.'.'.$idsKey;
+
+        if (Cache::has($key)) {
+            return Cache::get($key);
+        }
+
+        return CacheHelper::store(
+            $key,
+            parent::pollwonSiteProductsByIds($productType, $ids),
             self::TTL
         );
     }
