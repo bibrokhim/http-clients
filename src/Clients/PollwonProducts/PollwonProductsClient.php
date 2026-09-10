@@ -36,7 +36,7 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
     public function productExists(string $productId): array
     {
         return $this->get(
-            "pollwon-site/v1/admin/products/{$productId}/exists"
+            "/v1/admin/products/{$productId}/exists"
         )->json('data');
     }
 
