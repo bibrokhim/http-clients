@@ -7,8 +7,6 @@ use Illuminate\Http\Client\Response;
 
 class PollwonProductsClient extends BaseClient implements PollwonProductsClientInterface
 {
-    public const SITE_CATEGORIES_URI = '/v1/site/categories';
-
     public function productServiceSearch(string $name = '', array $parameters = []): array
     {
         return $this->get('/v1/admin/products/search', array_filter([
@@ -53,6 +51,6 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
             $this->withHeaders(['Accept-Language' => $language]);
         }
 
-        return $this->get(self::SITE_CATEGORIES_URI, $query);
+        return $this->get('/v1/site/categories', $query);
     }
 }

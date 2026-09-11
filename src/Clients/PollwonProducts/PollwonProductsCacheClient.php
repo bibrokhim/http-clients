@@ -64,7 +64,7 @@ class PollwonProductsCacheClient extends PollwonProductsClient
 
     public function siteCategories(?string $parentId, ?string $language = null): array
     {
-        $key = static::siteCategoriesCacheKey($parentId, $language);
+        $key = $this->siteCategoriesCacheKey($parentId, $language);
 
         if (Cache::has($key)) {
             return Cache::get($key);
@@ -80,7 +80,7 @@ class PollwonProductsCacheClient extends PollwonProductsClient
         return $data;
     }
 
-    public static function siteCategoriesCacheKey(?string $parentId, ?string $language): string
+    private function siteCategoriesCacheKey(?string $parentId, ?string $language): string
     {
         return sprintf(
             '%s.%s.%s',
