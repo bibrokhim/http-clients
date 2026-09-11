@@ -26,49 +26,27 @@ public function index(PollwonProductsClientInterface $client, Request $request)
 {
     $categories = $client->siteCategories(
         $request->query('parent_id'),   // null for the root level
-        $request->getPreferredLanguage(['uz', 'ru', 'en']),
+        $request->header('Accept-Language'),
     );
 
-    return response()->json($categories->payload, $categories->status)
-        ->withHeaders(array_filter([
-            'Content-Language' => $categories->contentLanguage,
-            'Retry-After' => $categories->retryAfter,
-        ]));
+    return response()->json($categories);
 }
 ```
 
 ### The contract
 
 ```php
-public function siteCategories(?string $parentId, ?string $language = null): SiteCategoriesResponse;
+public function siteCategories(?string $parentId, ?string $language = null): array;
 ```
 
-- **`$parentId`** — only `null` means the root level. Any other string, an empty
-  one included, is sent downstream as `parent_id` and the product service rules
-  on it. An empty string is never promoted to a root lookup.
-- **`$language`** — optional. `null`, empty and anything outside `uz` / `ru` /
-  `en` all normalise to `uz`, and the result is sent as `Accept-Language`. This
-  is request-side only.
-
-`SiteCategoriesResponse` holds the downstream answer as it arrived:
-
-| Property          | Notes                                                            |
-| ----------------- | ---------------------------------------------------------------- |
-| `status`          | Original upstream status code.                                    |
-| `payload`         | Decoded JSON body — `null` when the body was not JSON.            |
-| `contentLanguage` | `Content-Language` verbatim, `null` when the upstream sent none.  |
-| `retryAfter`      | `Retry-After` verbatim — delta-seconds *or* an HTTP-date.         |
-
-Nothing is normalised or defaulted on the way back: a `Content-Language: en-US`
-is returned as `en-US`, and a header the upstream never sent stays `null` rather
-than being filled in with the requested language. `successful()`, `clientError()`
-and `serverError()` classify the status; `cacheable()` is true only for a 200
-with a decoded body.
-
-404, 422 and 429 are **returned, not thrown**, so the caller can proxy the
-original status, body and headers. 5xx throws `ServerErrorException` and
-connection failures keep the package's standard behaviour, both by way of the
-usual `BaseClient` rules.
+- **`$parentId`** — `null` is sent without `parent_id`; any other value is sent
+  unchanged as `parent_id`.
+- **`$language`** — when supplied, it is sent unchanged as `Accept-Language`.
+  The client does not validate, normalise, or replace it. When omitted, the
+  package's existing default `Accept-Language` header is used.
+- The decoded JSON body is returned as an `array`, in line with the other
+  `PollwonProductsClient` methods. Existing `BaseClient` error behaviour is
+  unchanged.
 
 ### Caching
 
@@ -81,15 +59,7 @@ pollwon-products.site-categories.v1.{language}.{root|parent_id}
 
 One key per level per locale, so root and each parent stay independent; `root` is
 used for a null parent only, and an empty-string parent gets its own key. Only a
-200 is stored — 404, 422, 429 and a non-JSON body are served to the caller but
-never cached.
-
-A cold key is filled behind `Cache::lock()`: the holder re-checks the cache once
-it has the lock, so a caller that waited reads the entry the holder wrote instead
-of issuing its own request. If the cache store is unreachable the client bypasses
-the cache and serves a single fresh response rather than failing; if the lock
-itself times out it raises a 503 `ServerErrorException` rather than adding a
-second concurrent request to a service that is already busy.
+successful response is stored.
 
 | Env var                              | Default | Purpose                       |
 | ------------------------------------ | ------- | ----------------------------- |

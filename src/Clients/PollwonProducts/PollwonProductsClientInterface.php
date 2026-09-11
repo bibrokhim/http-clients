@@ -15,5 +15,5 @@ interface PollwonProductsClientInterface
      */
     public function productExists(string $productId): array;
 
-    public function siteCategories(?string $parentId, ?string $language = null): SiteCategoriesResponse;
+    public function siteCategories(?string $parentId, ?string $language = null): array;
 }
