@@ -10,6 +10,8 @@ interface PollwonProductsClientInterface
 
     public function productsByIds(string $productType, array $ids): array;
 
+    public function pollwonSiteProductsByIds(string $productType = '', array $ids = []): array;
+
     /**
      * @return array{id?: string, exists?: bool}
      */
