@@ -62,6 +62,24 @@ class PollwonProductsCacheClient extends PollwonProductsClient
         );
     }
 
+    public function pollwonSiteProductsByIds(string $productType = '', array $ids = []): array
+    {
+        $idsKey = '["'.implode('","', $ids).'"]';
+        $key = self::PREFIX.__FUNCTION__.'.'.app()->getLocale().'.'.$productType.'.'.$idsKey;
+
+        $cached = Cache::get($key);
+
+        if ($cached !== null) {
+            return $cached;
+        }
+
+        return CacheHelper::store(
+            $key,
+            parent::pollwonSiteProductsByIds($productType, $ids),
+            self::TTL
+        );
+    }
+
     public function siteCategories(?string $parentId, ?string $language = null): array
     {
         $key = $this->siteCategoriesCacheKey($parentId, $language);
