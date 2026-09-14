@@ -23,7 +23,7 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
     public function productsByIds(string $productType = '', array $ids = []): array
     {
         return $this
-            ->post('/v1/admin/products/by-ids', [
+            ->post('/v1/catalog/products/by-ids', [
                 'filter' => [
                     'id' => $ids,
                 ],
