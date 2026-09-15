@@ -72,7 +72,7 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
 
     protected function counterpartiesMapPointsResponse(array $bounds): Response
     {
-        return $this->get('/pollwon-site/v1/site/counterparties/map-points', [
+        return $this->get('/v1/site/counterparties/map-points', [
             'bounds' => $bounds,
         ]);
     }
