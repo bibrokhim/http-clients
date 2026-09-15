@@ -15,6 +15,10 @@ class PollwonProductsCacheClient extends PollwonProductsClient
 
     private const SITE_CATEGORIES_TTL = 300;
 
+    private const COUNTERPARTIES_MAP_POINTS_PREFIX = 'pollwon-products.counterparties-map-points.v1';
+
+    private const COUNTERPARTIES_MAP_POINTS_TTL = 300;
+
     public function productServiceSearch(string $name = '', array $parameters = []): array
     {
         $key = self::PREFIX.__FUNCTION__.'.'.md5(serialize([$name, $parameters]));
@@ -98,6 +102,24 @@ class PollwonProductsCacheClient extends PollwonProductsClient
         return $data;
     }
 
+    public function counterpartiesMapPoints(array $bounds): array
+    {
+        $key = $this->counterpartiesMapPointsCacheKey($bounds);
+
+        if (Cache::has($key)) {
+            return Cache::get($key);
+        }
+
+        $response = $this->counterpartiesMapPointsResponse($bounds);
+        $data = $response->json();
+
+        if ($response->successful()) {
+            return CacheHelper::store($key, $data, $this->counterpartiesMapPointsTtl());
+        }
+
+        return $data;
+    }
+
     private function siteCategoriesCacheKey(?string $parentId, ?string $language): string
     {
         return sprintf(
@@ -116,5 +138,22 @@ class PollwonProductsCacheClient extends PollwonProductsClient
         );
 
         return $ttl > 0 ? $ttl : self::SITE_CATEGORIES_TTL;
+    }
+
+    private function counterpartiesMapPointsCacheKey(array $bounds): string
+    {
+        ksort($bounds);
+
+        return self::COUNTERPARTIES_MAP_POINTS_PREFIX.'.'.md5(serialize($bounds));
+    }
+
+    private function counterpartiesMapPointsTtl(): int
+    {
+        $ttl = (int) config(
+            'http_clients.pollwon_products.counterparties_map_points_cache_ttl',
+            self::COUNTERPARTIES_MAP_POINTS_TTL
+        );
+
+        return $ttl > 0 ? $ttl : self::COUNTERPARTIES_MAP_POINTS_TTL;
     }
 }

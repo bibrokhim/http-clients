@@ -33,6 +33,11 @@ return [
             'POLLWON_SITE_CATEGORIES_CACHE_TTL',
             env('POLLWON_PRODUCTS_SITE_CATEGORIES_CACHE_TTL', 300)
         ),
+
+        'counterparties_map_points_cache_ttl' => env(
+            'POLLWON_COUNTERPARTIES_MAP_POINTS_CACHE_TTL',
+            300
+        ),
     ],
     'one_c' => [
         'base_url' => env('ONE_C_BASE_URL'),

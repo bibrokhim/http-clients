@@ -54,6 +54,11 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
         return $this->siteCategoriesResponse($parentId, $language)->json();
     }
 
+    public function counterpartiesMapPoints(array $bounds): array
+    {
+        return $this->counterpartiesMapPointsResponse($bounds)->json();
+    }
+
     protected function siteCategoriesResponse(?string $parentId, ?string $language = null): Response
     {
         $query = $parentId === null ? [] : ['parent_id' => $parentId];
@@ -63,5 +68,12 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
         }
 
         return $this->get('/v1/site/categories', $query);
+    }
+
+    protected function counterpartiesMapPointsResponse(array $bounds): Response
+    {
+        return $this->get('/pollwon-site/v1/site/counterparties/map-points', [
+            'bounds' => $bounds,
+        ]);
     }
 }
