@@ -18,4 +18,9 @@ interface PollwonProductsClientInterface
     public function productExists(string $productId): array;
 
     public function siteCategories(?string $parentId, ?string $language = null): array;
+
+    /**
+     * @param array{north?: scalar, south?: scalar, east?: scalar, west?: scalar} $bounds
+     */
+    public function counterpartiesMapPoints(array $bounds): array;
 }

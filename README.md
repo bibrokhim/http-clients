@@ -75,6 +75,24 @@ service category events, so a change to a category's `active`, `title`,
 `position` or `parent` becomes visible only once the entry lapses. Shorten the
 TTL if that window is too wide.
 
+## Pollwon Product Service — counterparty map points
+
+`GET {POLLWON_PRODUCTS_BASE_URL}/pollwon-site/v1/site/counterparties/map-points`
+returns map points within the supplied bounds.
+
+```php
+$points = $client->counterpartiesMapPoints([
+    'north' => 41.36,
+    'south' => 41.20,
+    'east' => 69.38,
+    'west' => 69.15,
+]);
+```
+
+With `HTTP_CLIENT_CACHE=true`, successful responses are cached per bounds for
+300 seconds by default. Set `POLLWON_COUNTERPARTIES_MAP_POINTS_CACHE_TTL` to
+change the lifetime in seconds. Bound key order does not affect the cache key.
+
 ## Development
 
 ```bash
