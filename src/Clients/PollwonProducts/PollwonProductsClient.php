@@ -49,9 +49,12 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
         )->json('data');
     }
 
-    public function siteCategories(?string $parentId, ?string $language = null): array
-    {
-        return $this->siteCategoriesResponse($parentId, $language)->json();
+    public function siteCategories(
+        ?string $parentId,
+        ?string $language = null,
+        ?string $slug = null,
+    ): array {
+        return $this->siteCategoriesResponse($parentId, $language, $slug)->json();
     }
 
     public function counterpartiesMapPoints(array $bounds): array
@@ -59,9 +62,20 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
         return $this->counterpartiesMapPointsResponse($bounds)->json();
     }
 
-    protected function siteCategoriesResponse(?string $parentId, ?string $language = null): Response
-    {
-        $query = $parentId === null ? [] : ['parent_id' => $parentId];
+    protected function siteCategoriesResponse(
+        ?string $parentId,
+        ?string $language = null,
+        ?string $slug = null,
+    ): Response {
+        $query = [];
+
+        if ($parentId !== null) {
+            $query['parent_id'] = $parentId;
+        }
+
+        if ($slug !== null) {
+            $query['slug'] = $slug;
+        }
 
         if ($language !== null) {
             $this->withHeaders(['Accept-Language' => $language]);
