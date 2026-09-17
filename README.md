@@ -27,6 +27,7 @@ public function index(PollwonProductsClientInterface $client, Request $request)
     $categories = $client->siteCategories(
         $request->query('parent_id'),   // null for the root level
         $request->header('Accept-Language'),
+        $request->query('slug'),
     );
 
     return response()->json($categories);
@@ -36,7 +37,11 @@ public function index(PollwonProductsClientInterface $client, Request $request)
 ### The contract
 
 ```php
-public function siteCategories(?string $parentId, ?string $language = null): array;
+public function siteCategories(
+    ?string $parentId,
+    ?string $language = null,
+    ?string $slug = null,
+): array;
 ```
 
 - **`$parentId`** — `null` is sent without `parent_id`; any other value is sent
@@ -44,6 +49,8 @@ public function siteCategories(?string $parentId, ?string $language = null): arr
 - **`$language`** — when supplied, it is sent unchanged as `Accept-Language`.
   The client does not validate, normalise, or replace it. When omitted, the
   package's existing default `Accept-Language` header is used.
+- **`$slug`** — when supplied, it is sent unchanged as `slug`. It can be used
+  together with `$parentId`; the client does not validate either lookup value.
 - The decoded JSON body is returned as an `array`, in line with the other
   `PollwonProductsClient` methods. Existing `BaseClient` error behaviour is
   unchanged.
@@ -54,12 +61,13 @@ With `HTTP_CLIENT_CACHE=true` the container binds `PollwonProductsCacheClient`,
 which caches under:
 
 ```
-pollwon-products.site-categories.v1.{language}.{root|parent_id}
+pollwon-products.site-categories.v1.{language}.{root|lookup}
 ```
 
-One key per level per locale, so root and each parent stay independent; `root` is
-used for a null parent only, and an empty-string parent gets its own key. Only a
-successful response is stored.
+One key per lookup and locale, so root, each parent lookup, and each slug lookup
+stay independent; a combined parent-and-slug lookup gets its own key as well.
+`root` is used only when both lookups are null, and empty strings remain distinct
+values. Only a successful 2xx response is stored.
 
 | Env var                              | Default | Purpose                       |
 | ------------------------------------ | ------- | ----------------------------- |

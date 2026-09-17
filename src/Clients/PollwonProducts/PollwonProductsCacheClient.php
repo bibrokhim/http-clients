@@ -84,15 +84,18 @@ class PollwonProductsCacheClient extends PollwonProductsClient
         );
     }
 
-    public function siteCategories(?string $parentId, ?string $language = null): array
-    {
-        $key = $this->siteCategoriesCacheKey($parentId, $language);
+    public function siteCategories(
+        ?string $parentId,
+        ?string $language = null,
+        ?string $slug = null,
+    ): array {
+        $key = $this->siteCategoriesCacheKey($parentId, $language, $slug);
 
         if (Cache::has($key)) {
             return Cache::get($key);
         }
 
-        $response = $this->siteCategoriesResponse($parentId, $language);
+        $response = $this->siteCategoriesResponse($parentId, $language, $slug);
         $data = $response->json();
 
         if ($response->successful()) {
@@ -120,14 +123,26 @@ class PollwonProductsCacheClient extends PollwonProductsClient
         return $data;
     }
 
-    private function siteCategoriesCacheKey(?string $parentId, ?string $language): string
+    private function siteCategoriesCacheKey(?string $parentId, ?string $language, ?string $slug): string
     {
         return sprintf(
             '%s.%s.%s',
             self::SITE_CATEGORIES_PREFIX,
             $language ?? app()->getLocale(),
-            $parentId ?? 'root'
+            $this->siteCategoriesLookupKey($parentId, $slug)
         );
+    }
+
+    private function siteCategoriesLookupKey(?string $parentId, ?string $slug): string
+    {
+        if ($parentId === null && $slug === null) {
+            return 'root';
+        }
+
+        return 'lookup.'.hash('sha256', serialize([
+            'parent_id' => $parentId,
+            'slug' => $slug,
+        ]));
     }
 
     private function siteCategoriesTtl(): int
