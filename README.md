@@ -83,6 +83,70 @@ service category events, so a change to a category's `active`, `title`,
 `position` or `parent` becomes visible only once the entry lapses. Shorten the
 TTL if that window is too wide.
 
+## Pollwon Product Service — storefront products
+
+The four public catalog endpoints the storefront reads. Each one forwards its
+query string verbatim and returns the decoded upstream body unchanged, so the
+consuming application decides what to validate and what to expose.
+
+```php
+use Bibrokhim\HttpClients\Clients\PollwonProducts\PollwonProductsClientInterface;
+
+$client = app(PollwonProductsClientInterface::class);
+
+$list    = $client->siteProducts(['category_slug' => 'nasoslar', 'page' => 2], 'uz');
+$search  = $client->siteProductSearch(['search' => 'nasos'], 'ru');
+$product = $client->siteProduct('0f8fad5b-d9cb-469f-a165-70867728950e', 'uz');
+$similar = $client->siteSimilarProducts('0f8fad5b-d9cb-469f-a165-70867728950e', 'uz');
+```
+
+### The contract
+
+```php
+public function siteProducts(array $query = [], ?string $language = null): array;
+public function siteProductSearch(array $query = [], ?string $language = null): array;
+public function siteProduct(string $productId, ?string $language = null): array;
+public function siteSimilarProducts(string $productId, ?string $language = null): array;
+```
+
+| Method | Upstream path |
+| --- | --- |
+| `siteProducts` | `GET /v1/site` |
+| `siteProductSearch` | `GET /v1/site/search` |
+| `siteProduct` | `GET /v1/site/{productId}` |
+| `siteSimilarProducts` | `GET /v1/site/{productId}/similar-products` |
+
+- **`$query`** — sent verbatim, including nested parameters such as
+  `specifications[<uuid>][]` and `ranges[<uuid>][from]`. The client neither
+  validates nor renames anything.
+- **`$language`** — when supplied it is sent unchanged as `Accept-Language`;
+  otherwise `BaseClient`'s default (the host app's locale) applies.
+- The decoded JSON body is returned as an `array`, in line with the other
+  `PollwonProductsClient` methods. Existing `BaseClient` error behaviour is
+  unchanged: 5xx always throws `ServerErrorException`, and 4xx throws
+  `ClientErrorException` only when the caller enabled `failOnClientErrors()`.
+
+### Caching
+
+With `HTTP_CLIENT_CACHE=true` the container binds `PollwonProductsCacheClient`,
+which caches under:
+
+```
+pollwon-products.site-products.v1.{language}.{all|query.<sha256>}
+pollwon-products.site-product-search.v1.{language}.{all|query.<sha256>}
+pollwon-products.site-product.v1.{language}.{productId}
+pollwon-products.site-similar-products.v1.{language}.{productId}
+```
+
+Only a successful 2xx response is stored. The list and search keys hash the
+whole parameter set, so every distinct filter, page, sort and locale
+combination gets its own entry; key order is normalised, value order is not.
+
+| Env var                           | Default | Purpose                          |
+| --------------------------------- | ------- | -------------------------------- |
+| `POLLWON_PRODUCTS_BASE_URL`       | —       | Service base URL, ending `/api/pollwon-site`. |
+| `POLLWON_SITE_PRODUCTS_CACHE_TTL` | `300`   | Cache lifetime for all four, in seconds. |
+
 ## Pollwon Product Service — counterparty map points
 
 `GET {POLLWON_PRODUCTS_BASE_URL}/pollwon-site/v1/site/counterparties/map-points`

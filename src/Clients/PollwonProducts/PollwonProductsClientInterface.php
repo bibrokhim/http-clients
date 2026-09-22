@@ -24,6 +24,30 @@ interface PollwonProductsClientInterface
     ): array;
 
     /**
+     * Storefront product list — `GET /v1/site`.
+     *
+     * @param  array<string, mixed>  $query  sent verbatim as the query string
+     */
+    public function siteProducts(array $query = [], ?string $language = null): array;
+
+    /**
+     * Storefront product search — `GET /v1/site/search`.
+     *
+     * @param  array<string, mixed>  $query  sent verbatim as the query string
+     */
+    public function siteProductSearch(array $query = [], ?string $language = null): array;
+
+    /**
+     * Storefront product detail — `GET /v1/site/{productId}`.
+     */
+    public function siteProduct(string $productId, ?string $language = null): array;
+
+    /**
+     * Storefront similar products — `GET /v1/site/{productId}/similar-products`.
+     */
+    public function siteSimilarProducts(string $productId, ?string $language = null): array;
+
+    /**
      * @param  array{north?: scalar, south?: scalar, east?: scalar, west?: scalar}  $bounds
      */
     public function counterpartiesMapPoints(array $bounds): array;
