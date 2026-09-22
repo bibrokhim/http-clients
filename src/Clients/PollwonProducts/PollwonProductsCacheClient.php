@@ -18,8 +18,6 @@ class PollwonProductsCacheClient extends PollwonProductsClient
 
     private const SITE_PRODUCTS_PREFIX = 'pollwon-products.site-products.v1';
 
-    private const SITE_PRODUCT_SEARCH_PREFIX = 'pollwon-products.site-product-search.v1';
-
     private const SITE_PRODUCT_PREFIX = 'pollwon-products.site-product.v1';
 
     private const SITE_SIMILAR_PRODUCTS_PREFIX = 'pollwon-products.site-similar-products.v1';
@@ -126,10 +124,7 @@ class PollwonProductsCacheClient extends PollwonProductsClient
 
     public function siteProductSearch(array $query = [], ?string $language = null): array
     {
-        return $this->rememberSiteProductResponse(
-            $this->siteProductQueryCacheKey(self::SITE_PRODUCT_SEARCH_PREFIX, $query, $language),
-            fn (): Response => $this->siteProductSearchResponse($query, $language),
-        );
+        return $this->siteProductSearchResponse($query, $language)->json();
     }
 
     public function siteProduct(string $productId, ?string $language = null): array
