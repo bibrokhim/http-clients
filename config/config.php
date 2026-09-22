@@ -34,6 +34,8 @@ return [
             env('POLLWON_PRODUCTS_SITE_CATEGORIES_CACHE_TTL', 300)
         ),
 
+        'site_products_cache_ttl' => env('POLLWON_SITE_PRODUCTS_CACHE_TTL', 300),
+
         'counterparties_map_points_cache_ttl' => env(
             'POLLWON_COUNTERPARTIES_MAP_POINTS_CACHE_TTL',
             300

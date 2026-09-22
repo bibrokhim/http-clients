@@ -57,6 +57,26 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
         return $this->siteCategoriesResponse($parentId, $language, $slug)->json();
     }
 
+    public function siteProducts(array $query = [], ?string $language = null): array
+    {
+        return $this->siteProductsResponse($query, $language)->json();
+    }
+
+    public function siteProductSearch(array $query = [], ?string $language = null): array
+    {
+        return $this->siteProductSearchResponse($query, $language)->json();
+    }
+
+    public function siteProduct(string $productId, ?string $language = null): array
+    {
+        return $this->siteProductResponse($productId, $language)->json();
+    }
+
+    public function siteSimilarProducts(string $productId, ?string $language = null): array
+    {
+        return $this->siteSimilarProductsResponse($productId, $language)->json();
+    }
+
     public function counterpartiesMapPoints(array $bounds): array
     {
         return $this->counterpartiesMapPointsResponse($bounds)->json();
@@ -84,10 +104,39 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
         return $this->get('/v1/site/categories', $query);
     }
 
+    protected function siteProductsResponse(array $query, ?string $language): Response
+    {
+        return $this->withLanguage($language)->get('/v1/site', $query);
+    }
+
+    protected function siteProductSearchResponse(array $query, ?string $language): Response
+    {
+        return $this->withLanguage($language)->get('/v1/site/search', $query);
+    }
+
+    protected function siteProductResponse(string $productId, ?string $language): Response
+    {
+        return $this->withLanguage($language)->get("/v1/site/{$productId}");
+    }
+
+    protected function siteSimilarProductsResponse(string $productId, ?string $language): Response
+    {
+        return $this->withLanguage($language)->get("/v1/site/{$productId}/similar-products");
+    }
+
     protected function counterpartiesMapPointsResponse(array $bounds): Response
     {
         return $this->get('/v1/site/counterparties/map-points', [
             'bounds' => $bounds,
         ]);
+    }
+
+    private function withLanguage(?string $language): static
+    {
+        if ($language !== null) {
+            $this->withHeaders(['Accept-Language' => $language]);
+        }
+
+        return $this;
     }
 }

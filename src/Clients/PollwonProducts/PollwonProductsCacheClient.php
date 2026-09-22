@@ -3,6 +3,7 @@
 namespace Bibrokhim\HttpClients\Clients\PollwonProducts;
 
 use Bibrokhim\HttpClients\CacheHelper;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Cache;
 
 class PollwonProductsCacheClient extends PollwonProductsClient
@@ -14,6 +15,14 @@ class PollwonProductsCacheClient extends PollwonProductsClient
     private const SITE_CATEGORIES_PREFIX = 'pollwon-products.site-categories.v1';
 
     private const SITE_CATEGORIES_TTL = 300;
+
+    private const SITE_PRODUCTS_PREFIX = 'pollwon-products.site-products.v1';
+
+    private const SITE_PRODUCT_PREFIX = 'pollwon-products.site-product.v1';
+
+    private const SITE_SIMILAR_PRODUCTS_PREFIX = 'pollwon-products.site-similar-products.v1';
+
+    private const SITE_PRODUCTS_TTL = 300;
 
     private const COUNTERPARTIES_MAP_POINTS_PREFIX = 'pollwon-products.counterparties-map-points.v1';
 
@@ -105,6 +114,35 @@ class PollwonProductsCacheClient extends PollwonProductsClient
         return $data;
     }
 
+    public function siteProducts(array $query = [], ?string $language = null): array
+    {
+        return $this->rememberSiteProductResponse(
+            $this->siteProductQueryCacheKey(self::SITE_PRODUCTS_PREFIX, $query, $language),
+            fn (): Response => $this->siteProductsResponse($query, $language),
+        );
+    }
+
+    public function siteProductSearch(array $query = [], ?string $language = null): array
+    {
+        return $this->siteProductSearchResponse($query, $language)->json();
+    }
+
+    public function siteProduct(string $productId, ?string $language = null): array
+    {
+        return $this->rememberSiteProductResponse(
+            $this->siteProductIdCacheKey(self::SITE_PRODUCT_PREFIX, $productId, $language),
+            fn (): Response => $this->siteProductResponse($productId, $language),
+        );
+    }
+
+    public function siteSimilarProducts(string $productId, ?string $language = null): array
+    {
+        return $this->rememberSiteProductResponse(
+            $this->siteProductIdCacheKey(self::SITE_SIMILAR_PRODUCTS_PREFIX, $productId, $language),
+            fn (): Response => $this->siteSimilarProductsResponse($productId, $language),
+        );
+    }
+
     public function counterpartiesMapPoints(array $bounds): array
     {
         $key = $this->counterpartiesMapPointsCacheKey($bounds);
@@ -153,6 +191,70 @@ class PollwonProductsCacheClient extends PollwonProductsClient
         );
 
         return $ttl > 0 ? $ttl : self::SITE_CATEGORIES_TTL;
+    }
+
+    /**
+     * @param  callable(): Response  $request
+     */
+    private function rememberSiteProductResponse(string $key, callable $request): array
+    {
+        if (Cache::has($key)) {
+            return Cache::get($key);
+        }
+
+        $response = $request();
+        $data = $response->json();
+
+        if ($response->successful()) {
+            return CacheHelper::store($key, $data, $this->siteProductsTtl());
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param  array<string, mixed>  $query
+     */
+    private function siteProductQueryCacheKey(string $prefix, array $query, ?string $language): string
+    {
+        return sprintf(
+            '%s.%s.%s',
+            $prefix,
+            $language ?? app()->getLocale(),
+            $query === [] ? 'all' : 'query.'.hash('sha256', serialize($this->sortQueryKeys($query)))
+        );
+    }
+
+    private function siteProductIdCacheKey(string $prefix, string $productId, ?string $language): string
+    {
+        return sprintf('%s.%s.%s', $prefix, $language ?? app()->getLocale(), $productId);
+    }
+
+    /**
+     * @param  array<string, mixed>  $query
+     * @return array<string, mixed>
+     */
+    private function sortQueryKeys(array $query): array
+    {
+        ksort($query);
+
+        foreach ($query as $key => $value) {
+            if (is_array($value)) {
+                $query[$key] = $this->sortQueryKeys($value);
+            }
+        }
+
+        return $query;
+    }
+
+    private function siteProductsTtl(): int
+    {
+        $ttl = (int) config(
+            'http_clients.pollwon_products.site_products_cache_ttl',
+            self::SITE_PRODUCTS_TTL
+        );
+
+        return $ttl > 0 ? $ttl : self::SITE_PRODUCTS_TTL;
     }
 
     private function counterpartiesMapPointsCacheKey(array $bounds): string
