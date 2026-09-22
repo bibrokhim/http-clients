@@ -218,10 +218,6 @@ class PollwonProductsCacheClient extends PollwonProductsClient
     }
 
     /**
-     * One entry per locale and per exact parameter set: storefront listings
-     * are localized, and two different filter combinations must never share a
-     * page of results.
-     *
      * @param  array<string, mixed>  $query
      */
     private function siteProductQueryCacheKey(string $prefix, array $query, ?string $language): string
@@ -240,11 +236,6 @@ class PollwonProductsCacheClient extends PollwonProductsClient
     }
 
     /**
-     * Only key order is normalised, so `?page=2&per_page=5` and
-     * `?per_page=5&page=2` share an entry. Values keep their own order: for a
-     * list parameter such as `product_ids` the order is part of the request
-     * the upstream service receives.
-     *
      * @param  array<string, mixed>  $query
      * @return array<string, mixed>
      */

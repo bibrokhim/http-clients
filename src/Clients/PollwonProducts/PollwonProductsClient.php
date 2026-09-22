@@ -131,11 +131,6 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
         ]);
     }
 
-    /**
-     * BaseClient already defaults Accept-Language to the host app's locale;
-     * an explicit value overrides it for this one request, after which
-     * execute() resets the headers.
-     */
     private function withLanguage(?string $language): static
     {
         if ($language !== null) {
