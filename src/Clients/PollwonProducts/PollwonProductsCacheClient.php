@@ -24,6 +24,10 @@ class PollwonProductsCacheClient extends PollwonProductsClient
 
     private const SITE_PRODUCTS_TTL = 300;
 
+    private const SITE_SITEMAP_PREFIX = 'pollwon-products.site-sitemap.v1';
+
+    private const SITE_SITEMAP_TTL = 1800;
+
     private const COUNTERPARTIES_MAP_POINTS_PREFIX = 'pollwon-products.counterparties-map-points.v1';
 
     private const COUNTERPARTIES_MAP_POINTS_TTL = 300;
@@ -143,6 +147,24 @@ class PollwonProductsCacheClient extends PollwonProductsClient
         );
     }
 
+    public function siteSitemap(): array
+    {
+        $key = self::SITE_SITEMAP_PREFIX;
+
+        if (Cache::has($key)) {
+            return Cache::get($key);
+        }
+
+        $response = $this->siteSitemapResponse();
+        $data = $response->json();
+
+        if ($response->successful()) {
+            return CacheHelper::store($key, $data, $this->siteSitemapTtl());
+        }
+
+        return $data;
+    }
+
     public function counterpartiesMapPoints(array $bounds): array
     {
         $key = $this->counterpartiesMapPointsCacheKey($bounds);
@@ -255,6 +277,16 @@ class PollwonProductsCacheClient extends PollwonProductsClient
         );
 
         return $ttl > 0 ? $ttl : self::SITE_PRODUCTS_TTL;
+    }
+
+    private function siteSitemapTtl(): int
+    {
+        $ttl = (int) config(
+            'http_clients.pollwon_products.site_sitemap_cache_ttl',
+            self::SITE_SITEMAP_TTL
+        );
+
+        return $ttl > 0 ? $ttl : self::SITE_SITEMAP_TTL;
     }
 
     private function counterpartiesMapPointsCacheKey(array $bounds): string

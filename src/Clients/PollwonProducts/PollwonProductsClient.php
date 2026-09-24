@@ -77,6 +77,11 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
         return $this->siteSimilarProductsResponse($productId, $language)->json();
     }
 
+    public function siteSitemap(): array
+    {
+        return $this->siteSitemapResponse()->json();
+    }
+
     public function counterpartiesMapPoints(array $bounds): array
     {
         return $this->counterpartiesMapPointsResponse($bounds)->json();
@@ -122,6 +127,11 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
     protected function siteSimilarProductsResponse(string $productId, ?string $language): Response
     {
         return $this->withLanguage($language)->get("/v1/site/{$productId}/similar-products");
+    }
+
+    protected function siteSitemapResponse(): Response
+    {
+        return $this->get('/v1/site/sitemap');
     }
 
     protected function counterpartiesMapPointsResponse(array $bounds): Response

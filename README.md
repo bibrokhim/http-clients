@@ -147,6 +147,19 @@ combination gets its own entry; key order is normalised, value order is not.
 | `POLLWON_PRODUCTS_BASE_URL`       | —       | Service base URL, ending `/api/pollwon-site`. |
 | `POLLWON_SITE_PRODUCTS_CACHE_TTL` | `300`   | Cache lifetime for all four, in seconds. |
 
+## Pollwon Product Service — sitemap
+
+`GET {POLLWON_PRODUCTS_BASE_URL}/v1/site/sitemap` returns active products' slug
+maps for every available language. It has no parameters or request body.
+
+```php
+$sitemap = $client->siteSitemap();
+```
+
+With `HTTP_CLIENT_CACHE=true`, successful responses are cached under
+`pollwon-products.site-sitemap.v1` for 30 minutes by default. Set
+`POLLWON_SITE_SITEMAP_CACHE_TTL` to change the lifetime in seconds.
+
 ## Pollwon Product Service — counterparty map points
 
 `GET {POLLWON_PRODUCTS_BASE_URL}/pollwon-site/v1/site/counterparties/map-points`

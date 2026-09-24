@@ -48,6 +48,11 @@ interface PollwonProductsClientInterface
     public function siteSimilarProducts(string $productId, ?string $language = null): array;
 
     /**
+     * Sitemap product slugs — `GET /v1/site/sitemap`.
+     */
+    public function siteSitemap(): array;
+
+    /**
      * @param  array{north?: scalar, south?: scalar, east?: scalar, west?: scalar}  $bounds
      */
     public function counterpartiesMapPoints(array $bounds): array;
