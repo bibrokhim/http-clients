@@ -18,6 +18,8 @@ class PollwonProductsCacheClient extends PollwonProductsClient
 
     private const SITE_PRODUCTS_PREFIX = 'pollwon-products.site-products.v1';
 
+    private const SITE_PRODUCTS_POST_PREFIX = 'pollwon-products.site-products-post.v1';
+
     private const SITE_PRODUCT_PREFIX = 'pollwon-products.site-product.v1';
 
     private const SITE_SIMILAR_PRODUCTS_PREFIX = 'pollwon-products.site-similar-products.v1';
@@ -123,6 +125,18 @@ class PollwonProductsCacheClient extends PollwonProductsClient
         return $this->rememberSiteProductResponse(
             $this->siteProductQueryCacheKey(self::SITE_PRODUCTS_PREFIX, $query, $language),
             fn (): Response => $this->siteProductsResponse($query, $language),
+        );
+    }
+
+    public function siteProductsByPost(array $payload = [], ?string $language = null): array
+    {
+        return $this->rememberSiteProductResponse(
+            $this->siteProductQueryCacheKey(
+                self::SITE_PRODUCTS_POST_PREFIX,
+                $this->withSortedProductIds($payload),
+                $language,
+            ),
+            fn (): Response => $this->siteProductsByPostResponse($payload, $language),
         );
     }
 
@@ -267,6 +281,21 @@ class PollwonProductsCacheClient extends PollwonProductsClient
         }
 
         return $query;
+    }
+
+    /**
+     * @param  array<string, mixed>  $payload
+     * @return array<string, mixed>
+     */
+    private function withSortedProductIds(array $payload): array
+    {
+        if (isset($payload['product_ids']) && is_array($payload['product_ids'])) {
+            $ids = array_values($payload['product_ids']);
+            sort($ids, SORT_STRING);
+            $payload['product_ids'] = $ids;
+        }
+
+        return $payload;
     }
 
     private function siteProductsTtl(): int

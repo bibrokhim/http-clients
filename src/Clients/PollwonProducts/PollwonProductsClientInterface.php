@@ -31,6 +31,11 @@ interface PollwonProductsClientInterface
     public function siteProducts(array $query = [], ?string $language = null): array;
 
     /**
+     * @param  array<string, mixed>  $payload  sent verbatim as the JSON body
+     */
+    public function siteProductsByPost(array $payload = [], ?string $language = null): array;
+
+    /**
      * Storefront product search — `GET /v1/site/search`.
      *
      * @param  array<string, mixed>  $query  sent verbatim as the query string
