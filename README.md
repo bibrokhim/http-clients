@@ -95,6 +95,7 @@ use Bibrokhim\HttpClients\Clients\PollwonProducts\PollwonProductsClientInterface
 $client = app(PollwonProductsClientInterface::class);
 
 $list    = $client->siteProducts(['category_slug' => 'nasoslar', 'page' => 2], 'uz');
+$byIds   = $client->siteProductsByPost(['product_ids' => $ids, 'page' => 2], 'uz');
 $search  = $client->siteProductSearch(['search' => 'nasos'], 'ru');
 $product = $client->siteProduct('0f8fad5b-d9cb-469f-a165-70867728950e', 'uz');
 $similar = $client->siteSimilarProducts('0f8fad5b-d9cb-469f-a165-70867728950e', 'uz');
@@ -104,6 +105,7 @@ $similar = $client->siteSimilarProducts('0f8fad5b-d9cb-469f-a165-70867728950e', 
 
 ```php
 public function siteProducts(array $query = [], ?string $language = null): array;
+public function siteProductsByPost(array $payload = [], ?string $language = null): array;
 public function siteProductSearch(array $query = [], ?string $language = null): array;
 public function siteProduct(string $productId, ?string $language = null): array;
 public function siteSimilarProducts(string $productId, ?string $language = null): array;
@@ -112,6 +114,7 @@ public function siteSimilarProducts(string $productId, ?string $language = null)
 | Method | Upstream path |
 | --- | --- |
 | `siteProducts` | `GET /v1/site` |
+| `siteProductsByPost` | `POST /v1/site` |
 | `siteProductSearch` | `GET /v1/site/search` |
 | `siteProduct` | `GET /v1/site/{productId}` |
 | `siteSimilarProducts` | `GET /v1/site/{productId}/similar-products` |
@@ -119,6 +122,12 @@ public function siteSimilarProducts(string $productId, ?string $language = null)
 - **`$query`** — sent verbatim, including nested parameters such as
   `specifications[<uuid>][]` and `ranges[<uuid>][from]`. The client neither
   validates nor renames anything.
+- **`$payload`** (`siteProductsByPost`) — the same parameters as
+  `siteProducts`, sent verbatim as a JSON body. Use it when `product_ids` is
+  long: 500 UUIDs are ~29 KB as a query string, well past a typical proxy URL
+  limit. Upstream validation and the response shape match the GET list; only
+  the `links` URLs lose the body filters (the paginator keeps the query string
+  only), so page by `meta` and resend the body with a new `page`.
 - **`$language`** — when supplied it is sent unchanged as `Accept-Language`;
   otherwise `BaseClient`'s default (the host app's locale) applies.
 - The decoded JSON body is returned as an `array`, in line with the other
@@ -133,6 +142,7 @@ which caches under:
 
 ```
 pollwon-products.site-products.v1.{language}.{all|query.<sha256>}
+pollwon-products.site-products-post.v1.{language}.{all|query.<sha256>}
 pollwon-products.site-product-search.v1.{language}.{all|query.<sha256>}
 pollwon-products.site-product.v1.{language}.{productId}
 pollwon-products.site-similar-products.v1.{language}.{productId}
@@ -140,12 +150,14 @@ pollwon-products.site-similar-products.v1.{language}.{productId}
 
 Only a successful 2xx response is stored. The list and search keys hash the
 whole parameter set, so every distinct filter, page, sort and locale
-combination gets its own entry; key order is normalised, value order is not.
+combination gets its own entry; key order is normalised, value order is not —
+except `product_ids` in the POST list, which is sorted before hashing because
+upstream treats it as a set.
 
 | Env var                           | Default | Purpose                          |
 | --------------------------------- | ------- | -------------------------------- |
 | `POLLWON_PRODUCTS_BASE_URL`       | —       | Service base URL, ending `/api/pollwon-site`. |
-| `POLLWON_SITE_PRODUCTS_CACHE_TTL` | `300`   | Cache lifetime for all four, in seconds. |
+| `POLLWON_SITE_PRODUCTS_CACHE_TTL` | `300`   | Cache lifetime for the site product reads, in seconds. |
 
 ## Pollwon Product Service — sitemap
 

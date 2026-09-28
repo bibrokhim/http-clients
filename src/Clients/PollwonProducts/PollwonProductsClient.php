@@ -62,6 +62,11 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
         return $this->siteProductsResponse($query, $language)->json();
     }
 
+    public function siteProductsByPost(array $payload = [], ?string $language = null): array
+    {
+        return $this->siteProductsByPostResponse($payload, $language)->json();
+    }
+
     public function siteProductSearch(array $query = [], ?string $language = null): array
     {
         return $this->siteProductSearchResponse($query, $language)->json();
@@ -112,6 +117,11 @@ class PollwonProductsClient extends BaseClient implements PollwonProductsClientI
     protected function siteProductsResponse(array $query, ?string $language): Response
     {
         return $this->withLanguage($language)->get('/v1/site', $query);
+    }
+
+    protected function siteProductsByPostResponse(array $payload, ?string $language): Response
+    {
+        return $this->withLanguage($language)->post('/v1/site', $payload);
     }
 
     protected function siteProductSearchResponse(array $query, ?string $language): Response
