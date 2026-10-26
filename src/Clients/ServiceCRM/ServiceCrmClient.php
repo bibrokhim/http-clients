@@ -4,9 +4,15 @@ namespace Bibrokhim\HttpClients\Clients\ServiceCRM;
 
 use App\Models\Device;
 use Bibrokhim\HttpClients\Clients\BaseClient;
+use Illuminate\Http\Client\Response;
 
-class ServiceCrmClient extends BaseClient
+class ServiceCrmClient extends BaseClient implements ServiceCrmClientInterface
 {
+    public function serviceCountry(int $serviceId): array
+    {
+        return $this->serviceCountryResponse($serviceId)->json();
+    }
+
     public function fromServiceMobileApp(Device $device): self
     {
         return $this->withHeaders([
@@ -38,5 +44,10 @@ class ServiceCrmClient extends BaseClient
             'X-Build' => request()->header('X-Build'),
             'X-Version' => request()->header('X-Version'),
         ]);
+    }
+
+    protected function serviceCountryResponse(int $serviceId): Response
+    {
+        return $this->get("v1/services/$serviceId/country");
     }
 }
