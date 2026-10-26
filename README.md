@@ -11,7 +11,7 @@ composer require bibrokhim/http-clients
 
 Every client is bound in `HttpClientsServiceProvider`, reading `config/config.php`
 under the `http_clients` key. Setting `HTTP_CLIENT_CACHE=true` swaps the clients
-that have a cache decorator (`Products`, `PollwonProducts`, `CRM`) for their
+that have a cache decorator (`Products`, `PollwonProducts`, `CRM`, `ServiceCRM`) for their
 `*CacheClient` variant.
 
 ## Pollwon Product Service — site categories
@@ -189,6 +189,37 @@ $points = $client->counterpartiesMapPoints([
 With `HTTP_CLIENT_CACHE=true`, successful responses are cached per bounds for
 300 seconds by default. Set `POLLWON_COUNTERPARTIES_MAP_POINTS_CACHE_TTL` to
 change the lifetime in seconds. Bound key order does not affect the cache key.
+
+## Service CRM — service country
+
+`GET {SERVICE_CRM_BASE_URL}/v1/services/{serviceId}/country` returns the country
+(`uz` or `kz`) of a service.
+
+```php
+use Bibrokhim\HttpClients\Clients\ServiceCRM\ServiceCrmClientInterface;
+
+public function show(ServiceCrmClientInterface $client, Request $request)
+{
+    $data = $client->fromUser($request->user())->serviceCountry($serviceId);
+    // ['service_id' => 7, 'country' => 'kz']
+}
+```
+
+The decoded JSON body is returned as an `array`. A 4xx (for example `404` for an
+unknown service) is returned as its body; a 5xx throws `ServerErrorException`,
+as in every `BaseClient`.
+
+With `HTTP_CLIENT_CACHE=true` the container binds `ServiceCrmCacheClient`, which
+caches under `service-crm.serviceCountry.{serviceId}`. Only a successful 2xx
+response is stored. Inject `ServiceCrmClientInterface` to get this behaviour;
+`ServiceCrmClient` itself is never cached.
+
+| Env var                                 | Default | Purpose                  |
+| --------------------------------------- | ------- | ------------------------ |
+| `SERVICE_CRM_SERVICE_COUNTRY_CACHE_TTL` | `86400` | Cache lifetime, seconds. |
+
+A service's country rarely changes; after changing it in Service CRM the old
+value is served until the entry lapses.
 
 ## Development
 
