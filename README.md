@@ -2,7 +2,7 @@
 
 Typed HTTP clients for the internal microservices (CRM, Products, SMS, Firebase,
 Media, Helpdesk, OneC, ApiGateway, Rating, ServiceCRM, PsSap, Epamarket, Pos,
-PollwonProducts, PollwonSite). Installed as a dependency of the consuming
+PollwonProducts, PollwonSite, CallService). Installed as a dependency of the consuming
 Laravel applications; it is not run standalone.
 
 ```bash
@@ -189,6 +189,32 @@ $points = $client->counterpartiesMapPoints([
 With `HTTP_CLIENT_CACHE=true`, successful responses are cached per bounds for
 300 seconds by default. Set `POLLWON_COUNTERPARTIES_MAP_POINTS_CACHE_TTL` to
 change the lifetime in seconds. Bound key order does not affect the cache key.
+
+## Call Service
+
+`CallServiceClient` talks to call-service, the microservice that stores the calls of every
+call centre. call-service serves several call centres, so every request must name one in the
+`X-Api-Client` header. Each response holds only that call centre's data.
+
+```php
+use Bibrokhim\HttpClients\Clients\CallService\CallServiceClient;
+
+$response = app(CallServiceClient::class)
+    ->fromUser($request->user())
+    ->forApiClient(CallServiceClient::API_CLIENT_EPA_CRM)
+    ->get('v1/calls', $filters);
+```
+
+- `forApiClient()` sets `X-Api-Client`. The constants hold the clients registered in
+  call-service: `epa-crm` (Naumen) and `service-crm` (Asterisk).
+- Headers reset after every request (`BaseClient::resetClient()`), so call `fromUser()` and
+  `forApiClient()` again for each request.
+- Paths are relative to `CALL_SERVICE_BASE_URL` and start with `v1/`.
+
+| Env var                 | Default                              | Purpose                                                        |
+|-------------------------|--------------------------------------|----------------------------------------------------------------|
+| `CALL_SERVICE_BASE_URL` | `https://call-service.fake.uz/api`   | call-service API base URL                                      |
+| `CALL_SERVICE_TIMEOUT`  | not set (Laravel default, 30 s)      | Request timeout in seconds; empty or non-positive keeps the default |
 
 ## Development
 
