@@ -65,6 +65,10 @@ return [
     'pos' => [
         'base_url' => env('POS_BASE_URL', 'http://epa-pos-api.test/api'),
     ],
+    'call_service' => [
+        'base_url' => env('CALL_SERVICE_BASE_URL', 'https://call-service.fake.uz/api'),
+        'timeout' => env('CALL_SERVICE_TIMEOUT'),
+    ],
     'pollwon_site' => [
         'base_url' => env('POLLWON_SITE_BASE_URL', 'https://pollwon-site.fake.uz/api'),
     ],

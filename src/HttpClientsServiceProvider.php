@@ -3,6 +3,7 @@
 namespace Bibrokhim\HttpClients;
 
 use Bibrokhim\HttpClients\Clients\ApiGateway\ApiGatewayClient;
+use Bibrokhim\HttpClients\Clients\CallService\CallServiceClient;
 use Bibrokhim\HttpClients\Clients\CRM\CrmCacheClient;
 use Bibrokhim\HttpClients\Clients\CRM\CrmClient;
 use Bibrokhim\HttpClients\Clients\CRM\CrmClientInterface;
@@ -121,6 +122,15 @@ class HttpClientsServiceProvider extends ServiceProvider
         $this->app->bind(PosClient::class, function () {
             return new PosClient(
                 config('http_clients.pos.base_url'),
+            );
+        });
+        $this->app->bind(CallServiceClient::class, function () {
+            $timeout = config('http_clients.call_service.timeout');
+
+            return new CallServiceClient(
+                config('http_clients.call_service.base_url'),
+                null,
+                is_numeric($timeout) && (int) $timeout > 0 ? (int) $timeout : null,
             );
         });
         $this->app->bind(PollwonSiteClient::class, function () {

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-`bibrokhim/http-clients` is a Laravel package (PSR-4 namespace `Bibrokhim\HttpClients\`) that centralizes typed HTTP clients for talking to a set of internal microservices (CRM, Products, SMS, Firebase, Media, Helpdesk, OneC, ApiGateway, Rating, ServiceCRM, PsSap, Epamarket, Pos, PollwonProducts). It is consumed by other Laravel apps as a dependency, not run standalone.
+`bibrokhim/http-clients` is a Laravel package (PSR-4 namespace `Bibrokhim\HttpClients\`) that centralizes typed HTTP clients for talking to a set of internal microservices (CRM, Products, SMS, Firebase, Media, Helpdesk, OneC, ApiGateway, Rating, ServiceCRM, PsSap, Epamarket, Pos, PollwonProducts, CallService). It is consumed by other Laravel apps as a dependency, not run standalone.
 
 There is no test suite, build step, or linter configured in this repo (no `phpunit.xml`, no composer `scripts`, no CI config). Changes are validated by the consuming Laravel application(s).
 
@@ -26,7 +26,7 @@ There is no test suite, build step, or linter configured in this repo (no `phpun
 
 Most services under `src/Clients/<Service>/` follow one of these shapes — check sibling files before assuming which applies to a new client:
 
-- **Simple client**: just `<Service>Client extends BaseClient` (e.g. `ApiGatewayClient`, `OneCClient`, `HelpdeskClient`, `PsSapClient`, `EpamarketClient`, `RatingClient`). One class, no interface.
+- **Simple client**: just `<Service>Client extends BaseClient` (e.g. `ApiGatewayClient`, `OneCClient`, `HelpdeskClient`, `PsSapClient`, `EpamarketClient`, `RatingClient`, `CallServiceClient`). One class, no interface.
 - **Interface + concrete + cache decorator**: `<Service>ClientInterface`, `<Service>Client implements <Service>ClientInterface`, and `<Service>CacheClient extends <Service>Client` that overrides every interface method to wrap the parent call with `CacheHelper::store()` (see `Clients/Products`, `Clients/PollwonProducts`, `Clients/CRM`). The service provider picks the cache variant when `config('http_clients.cache')` is truthy. The cache key convention is `"<prefix>." . __FUNCTION__` plus any identifying arguments/query string appended — follow this exactly when adding a cached method so keys stay predictable and unique per parameter set.
 - **Interface + prod/dev split**: `<Service>ClientInterface` with a real client for production and a `*DevClient` that no-ops or redirects to a Telegram chat for non-production environments (see `SmsGatewayClient`/`SmsDevClient`, `FirebaseClient`/`FirebaseDevClient`). The service provider chooses based on `app()->isProduction()`, not the `cache` config flag. `FirebaseDevClient` does not extend `BaseClient` — it talks to Telegram directly via the `Http` facade.
 
